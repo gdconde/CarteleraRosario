@@ -3,6 +3,8 @@ package com.hitherejoe.mvpboilerplate.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.hitherejoe.mvpboilerplate.data.remote.ElCairoService;
+import com.hitherejoe.mvpboilerplate.data.remote.ElCairoServiceFactory;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateServiceFactory;
 import com.hitherejoe.mvpboilerplate.injection.ApplicationContext;
@@ -35,5 +37,11 @@ public class ApplicationModule {
     @Singleton
     MvpBoilerplateService provideMvpBoilerplateService() {
         return MvpBoilerplateServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    ElCairoService provideElCairoService() {
+        return ElCairoServiceFactory.makeSecretsService();
     }
 }

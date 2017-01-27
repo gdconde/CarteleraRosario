@@ -1,5 +1,6 @@
 package com.hitherejoe.mvpboilerplate.ui.main;
 
+import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +13,9 @@ import com.hitherejoe.mvpboilerplate.R;
 import com.hitherejoe.mvpboilerplate.ui.base.BaseActivity;
 import com.hitherejoe.mvpboilerplate.ui.common.ErrorView;
 import com.hitherejoe.mvpboilerplate.ui.detail.DetailActivity;
+import com.hitherejoe.mvpboilerplate.util.DialogFactory;
+
+import org.jsoup.select.Elements;
 
 import java.util.List;
 
@@ -61,6 +65,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, PokemonAd
         mErrorView.setErrorListener(this);
 
         mMainPresenter.getPokemon(POKEMON_COUNT);
+        mMainPresenter.getElCairoMovies();
     }
 
     @Override
@@ -103,6 +108,11 @@ public class MainActivity extends BaseActivity implements MainMvpView, PokemonAd
         mPokemonRecycler.setVisibility(View.GONE);
         mSwipeRefreshLayout.setVisibility(View.GONE);
         mErrorView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void showFirstMovie(String movieTitle) {
+        DialogFactory.createSimpleOkErrorDialog(this, movieTitle, "Anduvo").show();
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.hitherejoe.mvpboilerplate.data;
 
 import com.hitherejoe.mvpboilerplate.data.model.NamedResource;
 import com.hitherejoe.mvpboilerplate.data.model.Pokemon;
+import com.hitherejoe.mvpboilerplate.data.remote.ElCairoService;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService.PokemonListResponse;
 
@@ -11,6 +12,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import okhttp3.ResponseBody;
 import rx.Single;
 import rx.functions.Func1;
 
@@ -18,10 +20,12 @@ import rx.functions.Func1;
 public class DataManager {
 
     private final MvpBoilerplateService mMvpBoilerplateService;
+    private final ElCairoService mElCairoService;
 
     @Inject
-    public DataManager(MvpBoilerplateService mvpBoilerplateService) {
+    public DataManager(MvpBoilerplateService mvpBoilerplateService, ElCairoService elCairoService) {
         mMvpBoilerplateService = mvpBoilerplateService;
+        mElCairoService = elCairoService;
     }
 
     public Single<List<String>> getPokemonList(int limit) {
@@ -42,6 +46,10 @@ public class DataManager {
 
     public Single<Pokemon> getPokemon(String name) {
         return mMvpBoilerplateService.getPokemon(name);
+    }
+
+    public Single<ResponseBody> getElCairoMovies() {
+        return mElCairoService.getElCairoMovies();
     }
 
 }

@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.hitherejoe.mvpboilerplate.data.DataManager;
+import com.hitherejoe.mvpboilerplate.data.remote.ElCairoService;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService;
 import com.hitherejoe.mvpboilerplate.injection.ApplicationContext;
 import com.hitherejoe.mvpboilerplate.injection.module.ApplicationModule;
@@ -21,4 +22,5 @@ public interface ApplicationComponent {
     Application application();
     DataManager dataManager();
     MvpBoilerplateService mvpBoilerplateService();
+    ElCairoService elCairoService();
 }

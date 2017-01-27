@@ -5,10 +5,16 @@ import com.hitherejoe.mvpboilerplate.data.DataManager;
 import com.hitherejoe.mvpboilerplate.injection.ConfigPersistent;
 import com.hitherejoe.mvpboilerplate.ui.base.BasePresenter;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -61,5 +67,32 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }));
     }
 
+    public void getElCairoMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getElCairoMovies()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            parseElCairoMovies(value.string());
+                        } catch (IOException e) {
+                            Timber.e(e, "There was an error fetching el cairo web");
+                        }
+                    }
 
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+
+    private void parseElCairoMovies(String html) {
+        Document document = Jsoup.parse(html);
+        Elements elements = document.select("div.dia>ul>li>a[href]");
+        getMvpView().showFirstMovie(elements.get(0).text());
+    }
 }
