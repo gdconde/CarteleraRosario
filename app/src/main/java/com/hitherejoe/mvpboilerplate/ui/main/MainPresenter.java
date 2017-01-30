@@ -7,9 +7,11 @@ import com.hitherejoe.mvpboilerplate.ui.base.BasePresenter;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -93,6 +95,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     private void parseElCairoMovies(String html) {
         Document document = Jsoup.parse(html);
         Elements elements = document.select("div.dia>ul>li>a[href]");
-        getMvpView().showFirstMovie(elements.get(0).text());
+        ArrayList<String> movies = new ArrayList<>();
+        for (Element element: elements) {
+            movies.add(element.text());
+        }
+        getMvpView().showPokemon(movies);
     }
 }
