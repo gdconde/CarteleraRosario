@@ -9,11 +9,13 @@ import android.view.View;
 import android.widget.ProgressBar;
 
 import com.hitherejoe.mvpboilerplate.R;
+import com.hitherejoe.mvpboilerplate.data.model.Movie;
 import com.hitherejoe.mvpboilerplate.ui.base.BaseActivity;
 import com.hitherejoe.mvpboilerplate.ui.common.ErrorView;
 import com.hitherejoe.mvpboilerplate.ui.detail.DetailActivity;
 import com.hitherejoe.mvpboilerplate.util.DialogFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -21,12 +23,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class MainActivity extends BaseActivity implements MainMvpView, PokemonAdapter.ClickListener,
+public class MainActivity extends BaseActivity implements MainMvpView, MoviesAdapter.ClickListener,
         ErrorView.ErrorListener {
 
-    private static final int POKEMON_COUNT = 20;
-
-    @Inject PokemonAdapter mPokemonAdapter;
+    @Inject MoviesAdapter mMoviesAdapter;
     @Inject MainPresenter mMainPresenter;
 
     @BindView(R.id.view_error) ErrorView mErrorView;
@@ -51,13 +51,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, PokemonAd
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        mMainPresenter.getPokemon(POKEMON_COUNT);
+                        mMainPresenter.getElCairoMovies();
                     }
                 });
 
-        mPokemonAdapter.setClickListener(this);
+        mMoviesAdapter.setClickListener(this);
         mPokemonRecycler.setLayoutManager(new LinearLayoutManager(this));
-        mPokemonRecycler.setAdapter(mPokemonAdapter);
+        mPokemonRecycler.setAdapter(mMoviesAdapter);
 
         mErrorView.setErrorListener(this);
 
@@ -72,19 +72,24 @@ public class MainActivity extends BaseActivity implements MainMvpView, PokemonAd
     }
 
     @Override
-    public void showPokemon(List<String> pokemon) {
-        mPokemonAdapter.setPokemon(pokemon);
-        mPokemonAdapter.notifyDataSetChanged();
+    public void showMovies(ArrayList<Movie> movies) {
+        mMoviesAdapter.setMovies(movies);
+        mMoviesAdapter.notifyDataSetChanged();
 
         mPokemonRecycler.setVisibility(View.VISIBLE);
         mSwipeRefreshLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
+    public void onMovieClick(String movie) {
+        //TODO show movie detail activity
+    }
+
+    @Override
     public void showProgress(boolean show) {
         if (show) {
             if (mPokemonRecycler.getVisibility() == View.VISIBLE
-                    && mPokemonAdapter.getItemCount() > 0) {
+                    && mMoviesAdapter.getItemCount() > 0) {
                 mSwipeRefreshLayout.setRefreshing(true);
             } else {
                 mProgress.setVisibility(View.VISIBLE);
@@ -108,17 +113,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, PokemonAd
     }
 
     @Override
-    public void showFirstMovie(String movieTitle) {
-        DialogFactory.createSimpleOkErrorDialog(this, movieTitle, "Anduvo").show();
-    }
-
-    @Override
-    public void onPokemonClick(String pokemon) {
-        startActivity(DetailActivity.getStartIntent(this, pokemon));
-    }
-
-    @Override
     public void onReloadData() {
-        mMainPresenter.getPokemon(POKEMON_COUNT);
+        mMainPresenter.getElCairoMovies();
     }
 }

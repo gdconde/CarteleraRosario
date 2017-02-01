@@ -22,7 +22,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ElCairoServiceFactory {
 
     public static ElCairoService makeSecretsService() {
-        OkHttpClient okHttpClient = makeOkHttpClient(/*makeLoggingInterceptor()*/);
+        OkHttpClient okHttpClient = makeOkHttpClient(makeLoggingInterceptor());
         return makeElCairoService(okHttpClient, makeGson());
     }
 
@@ -36,9 +36,9 @@ public class ElCairoServiceFactory {
         return retrofit.create(ElCairoService.class);
     }
 
-    public static OkHttpClient makeOkHttpClient(/*HttpLoggingInterceptor httpLoggingInterceptor*/) {
+    public static OkHttpClient makeOkHttpClient(HttpLoggingInterceptor httpLoggingInterceptor) {
         return new OkHttpClient.Builder()
-                /*.addInterceptor(httpLoggingInterceptor)*/
+                .addInterceptor(httpLoggingInterceptor)
                 .build();
     }
 
@@ -49,10 +49,10 @@ public class ElCairoServiceFactory {
                 .create();
     }
 
-    /*public static HttpLoggingInterceptor makeLoggingInterceptor() {
+    public static HttpLoggingInterceptor makeLoggingInterceptor() {
         HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
         logging.setLevel(BuildConfig.DEBUG ? HttpLoggingInterceptor.Level.BODY
                 : HttpLoggingInterceptor.Level.NONE);
         return logging;
-    }*/
+    }
 }

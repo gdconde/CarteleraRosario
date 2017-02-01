@@ -4,6 +4,7 @@ package com.hitherejoe.mvpboilerplate.ui.main;
 import com.hitherejoe.mvpboilerplate.data.DataManager;
 import com.hitherejoe.mvpboilerplate.injection.ConfigPersistent;
 import com.hitherejoe.mvpboilerplate.ui.base.BasePresenter;
+import com.hitherejoe.mvpboilerplate.util.WebParser;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -47,7 +48,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         mSubscriptions = null;
     }
 
-    public void getPokemon(int limit) {
+    /*public void getPokemon(int limit) {
         checkViewAttached();
         getMvpView().showProgress(true);
         mSubscriptions.add(mDataManager.getPokemonList(limit)
@@ -67,7 +68,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                         Timber.e(error, "There was an error retrieving the pokemon");
                     }
                 }));
-    }
+    }*/
 
     public void getElCairoMovies() {
         checkViewAttached();
@@ -78,7 +79,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     @Override
                     public void onSuccess(ResponseBody value) {
                         try {
-                            parseElCairoMovies(value.string());
+                            getMvpView().showProgress(false);
+                            getMvpView().showMovies(WebParser.parseElCairoMovies(value.string()));
                         } catch (IOException e) {
                             Timber.e(e, "There was an error fetching el cairo web");
                         }
@@ -91,14 +93,4 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }));
     }
 
-
-    private void parseElCairoMovies(String html) {
-        Document document = Jsoup.parse(html);
-        Elements elements = document.select("div.dia>ul>li>a[href]");
-        ArrayList<String> movies = new ArrayList<>();
-        for (Element element: elements) {
-            movies.add(element.text());
-        }
-        getMvpView().showPokemon(movies);
-    }
 }
