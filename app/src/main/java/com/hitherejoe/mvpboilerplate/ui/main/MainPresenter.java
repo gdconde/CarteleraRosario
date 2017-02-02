@@ -13,6 +13,7 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -72,18 +73,45 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     public void getElCairoMovies() {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getElCairoMovies()
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        mSubscriptions.add(mDataManager.getElCairoMovies(calendar)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.computation())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for(String movieUrl : WebParser.parseElCairoMovies(value.string())) {
+                                getElCairoMovie(movieUrl);
+                            }
+                        } catch (IOException e) {
+                            Timber.e(e, "There was an error fetching el cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+    public void getElCairoMovie(String movieUrl) {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getElCairoMovie(movieUrl)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ResponseBody>() {
                     @Override
                     public void onSuccess(ResponseBody value) {
+                        getMvpView().showProgress(false);
                         try {
-                            getMvpView().showProgress(false);
-                            getMvpView().showMovies(WebParser.parseElCairoMovies(value.string()));
+                            getMvpView().showMovie(WebParser.parseElCairoMovie(value.string()));
                         } catch (IOException e) {
                             Timber.e(e, "There was an error fetching el cairo web");
                         }
+
                     }
 
                     @Override

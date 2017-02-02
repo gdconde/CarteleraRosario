@@ -81,6 +81,15 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     @Override
+    public void showMovie(Movie movie) {
+        mMoviesAdapter.addMovie(movie);
+        mMoviesAdapter.notifyDataSetChanged();
+
+        mPokemonRecycler.setVisibility(View.VISIBLE);
+        mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onMovieClick(String movie) {
         //TODO show movie detail activity
     }

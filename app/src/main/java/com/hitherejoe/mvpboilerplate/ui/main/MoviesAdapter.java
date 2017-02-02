@@ -34,6 +34,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         mMovies = movies;
     }
 
+    public void addMovie(Movie movie) {
+        if(mMovies.contains(movie)) {
+            return;
+        } else {
+            mMovies.add(movie);
+        }
+    }
+
     public void setClickListener(ClickListener clickListener) {
         mClickListener = clickListener;
     }

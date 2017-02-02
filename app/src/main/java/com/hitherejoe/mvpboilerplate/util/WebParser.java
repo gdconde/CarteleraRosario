@@ -8,7 +8,6 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 /**
  * Created by gdconde on 1/2/17.
@@ -16,39 +15,35 @@ import java.util.Calendar;
 
 public final class WebParser {
 
-    public static ArrayList<Movie> parseElCairoMovies(String html) {
+    public static ArrayList<String> parseElCairoMovies(String html) {
         Document document = Jsoup.parse(html);
 
-        //Get month and year
-        String url = document.select("meta[property=og:url]").attr("content");
-        String date = url.split("/")[5];
-        int year = Integer.parseInt(date.split("-")[0]);
-        int month = Integer.parseInt(date.split("-")[1]) - 1;
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(year, month, 1);
+        //Get movies URLs
+        Elements moviesLinks = document.select("div.dia>ul>li>a[href]");
 
-        //Get movies titles
-        Elements moviesTitles = document.select("div.dia>ul>li>a[href]");
-
-        //Create an array of movies titles and dates. To get the time I need to get another website
-        ArrayList<Movie> movies = new ArrayList<>();
-        for (Element title: moviesTitles) {
-            //Get day
-            int day = Integer.parseInt(title.parent().parent().firstElementSibling().text());
-            calendar.set(Calendar.DAY_OF_MONTH, day);
-
-            //Create new empty movie
-            Movie movie = new Movie();
-            movie.schedule = new ArrayList<>();
-
-            //Populate movie element with data
-            movie.title = title.text();
-            movie.schedule.add(calendar.getTimeInMillis());
-
-            //Add movie to array
-            movies.add(movie);
+        //Create an array of movies links
+        ArrayList<String> moviesUrls = new ArrayList<>();
+        for (Element movieLink : moviesLinks) {
+            moviesUrls.add(movieLink.attr("href"));
         }
-        return movies;
+        return moviesUrls;
+    }
+
+    public static Movie parseElCairoMovie(String html) {
+        Document document = Jsoup.parse(html);
+
+        //Create new Movie object
+        Movie movie = new Movie();
+        movie.schedule = new ArrayList<>();
+
+        //Get movie title
+        movie.title = document.select("h1.fichatitle").text();
+
+        //Get movie schedule
+        String scheduled = document.select("div.details>ul>li").text();
+        String month = document.select("div.rightcol>div.sidemenu>a").attr("title");
+        movie.schedule.add(ElCairoDateCreator.stringToTimestamp(scheduled, month));
+        return movie;
     }
 
 }

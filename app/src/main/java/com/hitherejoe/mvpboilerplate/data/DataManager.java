@@ -7,6 +7,7 @@ import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService.PokemonListResponse;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -48,8 +49,12 @@ public class DataManager {
         return mMvpBoilerplateService.getPokemon(name);
     }
 
-    public Single<ResponseBody> getElCairoMovies() {
-        return mElCairoService.getElCairoMovies();
+    public Single<ResponseBody> getElCairoMovies(Calendar date) {
+        return mElCairoService.getElCairoMovies(date);
+    }
+
+    public Single<ResponseBody> getElCairoMovie(String url) {
+        return mElCairoService.getElCairoMovie(url);
     }
 
 }
