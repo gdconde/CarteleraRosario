@@ -24,12 +24,15 @@ public final class WebParser {
         //Create an array of movies links
         ArrayList<String> moviesUrls = new ArrayList<>();
         for (Element movieLink : moviesLinks) {
-            moviesUrls.add(movieLink.attr("href"));
+            String link = movieLink.attr("href");
+            int indexOfSlash = link.lastIndexOf("/");
+            String usefulLink = link.substring(indexOfSlash + 1);
+            moviesUrls.add(usefulLink);
         }
         return moviesUrls;
     }
 
-    public static Movie parseElCairoMovie(String html) {
+    /*public static Movie parseElCairoMovie(String html) {
         Document document = Jsoup.parse(html);
 
         //Create new Movie object
@@ -43,7 +46,18 @@ public final class WebParser {
         String scheduled = document.select("div.details>ul>li").text();
         String month = document.select("div.rightcol>div.sidemenu>a").attr("title");
         movie.schedule.add(ElCairoDateCreator.stringToTimestamp(scheduled, month));
+
+        //Get movie sinopsis
+        movie.sinopsis = document.select("div.sinopsis>div.text").text();
+
         return movie;
+    }*/
+
+    public static String parseElCairoMovie(String html) {
+        Document document = Jsoup.parse(html);
+
+        String movieTitle = document.select("h1.fichatitle").text();
+        return movieTitle.substring(movieTitle.lastIndexOf("/") + 1);
     }
 
 }

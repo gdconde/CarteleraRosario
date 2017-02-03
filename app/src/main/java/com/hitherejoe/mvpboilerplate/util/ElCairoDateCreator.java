@@ -22,8 +22,8 @@ public final class ElCairoDateCreator {
         int minuteInt = Integer.parseInt(scheduleDivided[3].split(":")[1]);
 
         Calendar calendar = Calendar.getInstance();
-        calendar.set(yearInt, monthInt, dayInt, hourInt, minuteInt);
-        return calendar.getTimeInMillis();
+        calendar.set(yearInt, monthInt, dayInt, hourInt, minuteInt, 0);
+        return calendar.getTimeInMillis() / 1000;
     }
 
 }

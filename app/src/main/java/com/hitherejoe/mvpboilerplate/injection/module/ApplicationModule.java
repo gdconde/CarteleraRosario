@@ -7,6 +7,8 @@ import com.hitherejoe.mvpboilerplate.data.remote.ElCairoService;
 import com.hitherejoe.mvpboilerplate.data.remote.ElCairoServiceFactory;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService;
 import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateServiceFactory;
+import com.hitherejoe.mvpboilerplate.data.remote.TheMovieDbService;
+import com.hitherejoe.mvpboilerplate.data.remote.TheMovieDbServiceFactory;
 import com.hitherejoe.mvpboilerplate.injection.ApplicationContext;
 
 import javax.inject.Singleton;
@@ -43,5 +45,11 @@ public class ApplicationModule {
     @Singleton
     ElCairoService provideElCairoService() {
         return ElCairoServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    TheMovieDbService provideTheMovieDbService() {
+        return TheMovieDbServiceFactory.makeSecretsService();
     }
 }

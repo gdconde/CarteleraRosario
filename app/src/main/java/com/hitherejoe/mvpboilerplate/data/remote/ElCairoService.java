@@ -1,7 +1,5 @@
 package com.hitherejoe.mvpboilerplate.data.remote;
 
-import java.util.Calendar;
-
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -15,7 +13,7 @@ public interface ElCairoService {
 
     @GET("mes/{month}/index.html")
     Single<ResponseBody> getElCairoMovies(
-            @Path("month") Calendar month
+            @Path("month") String month
     );
 
     @GET("ver/{movieUrl}")

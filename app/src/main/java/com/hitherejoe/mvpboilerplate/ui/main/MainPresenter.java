@@ -2,6 +2,8 @@ package com.hitherejoe.mvpboilerplate.ui.main;
 
 
 import com.hitherejoe.mvpboilerplate.data.DataManager;
+import com.hitherejoe.mvpboilerplate.data.model.Movie;
+import com.hitherejoe.mvpboilerplate.data.model.MovieDbAnswer;
 import com.hitherejoe.mvpboilerplate.injection.ConfigPersistent;
 import com.hitherejoe.mvpboilerplate.ui.base.BasePresenter;
 import com.hitherejoe.mvpboilerplate.util.WebParser;
@@ -86,7 +88,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                                 getElCairoMovie(movieUrl);
                             }
                         } catch (IOException e) {
-                            Timber.e(e, "There was an error fetching el cairo web");
+                            Timber.e(e, "There was an error fetching El Cairo web");
                         }
                     }
 
@@ -107,9 +109,10 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     public void onSuccess(ResponseBody value) {
                         getMvpView().showProgress(false);
                         try {
-                            getMvpView().showMovie(WebParser.parseElCairoMovie(value.string()));
+//                            getMvpView().showMovie(WebParser.parseElCairoMovie(value.string()));
+                            getMovieData(WebParser.parseElCairoMovie(value.string()));
                         } catch (IOException e) {
-                            Timber.e(e, "There was an error fetching el cairo web");
+                            Timber.e(e, "There was an error fetching El Cairo web");
                         }
 
                     }
@@ -119,6 +122,25 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
                     }
                 }));
+    }
+
+    public void getMovieData(String movieTitle) {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getMovieData(movieTitle)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new SingleSubscriber<MovieDbAnswer>() {
+            @Override
+            public void onSuccess(MovieDbAnswer value) {
+                getMvpView().showProgress(false);
+                getMvpView().showMovie(value.results.get(0));
+            }
+
+            @Override
+            public void onError(Throwable error) {
+
+            }
+        }));
     }
 
 }

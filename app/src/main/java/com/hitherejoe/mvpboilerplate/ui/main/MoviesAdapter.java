@@ -1,13 +1,16 @@
 package com.hitherejoe.mvpboilerplate.ui.main;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hitherejoe.mvpboilerplate.R;
 import com.hitherejoe.mvpboilerplate.data.model.Movie;
+import com.squareup.picasso.Picasso;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -62,18 +65,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         StringBuilder builder = new StringBuilder();
 
         //Create DateFormat to show timestamp as string
-        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy - HH:mm", Locale.US);
 
-        //TODO: create a method in utils to convert arraylist<timestamp> in a good looking String
-        for(Long timestamp : movie.schedule) {
-            Date date = new Date(timestamp);
-            builder.append(sdf.format(date));
-            builder.append(" - ");
+        //TODO: create a method in utils to convert arraylist<timestamp> into a good looking String
+        if(movie.schedule != null && !movie.schedule.isEmpty()) {
+            for (Long timestamp : movie.schedule) {
+                Date date = new Date(timestamp);
+                builder.append(sdf.format(date));
+            }
+            holder.timeText.setText(builder.toString());
         }
 
         //Load data into UI
         holder.titleText.setText(movie.title);
-        holder.timeText.setText(builder.toString());
+        holder.sinopsisText.setText(movie.sinopsis);
+        if(movie.posterPath != null) {
+            Picasso.with(holder.posterImage.getContext()).load("https://image.tmdb.org/t/p/w154"+movie.posterPath).into(holder.posterImage);
+        }
     }
 
     @Override
@@ -85,6 +93,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         @BindView(R.id.text_title) TextView titleText;
         @BindView(R.id.text_time) TextView timeText;
+        @BindView(R.id.text_sinopsis) TextView sinopsisText;
+        @BindView(R.id.image_poster) ImageView posterImage;
 
         public Movie movie;
 

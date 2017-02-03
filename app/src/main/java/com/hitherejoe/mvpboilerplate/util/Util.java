@@ -1,5 +1,10 @@
 package com.hitherejoe.mvpboilerplate.util;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 /**
  * Created by gdconde on 2/2/17.
  */
@@ -22,6 +27,11 @@ public final class Util {
             case "Diciembre": return 11;
         }
         return -1;
+    }
+
+    public static String formatCalendarDateToString(Calendar date, String format) {
+        DateFormat sdf = new SimpleDateFormat(format, Locale.US);
+        return sdf.format(date.getTime());
     }
 
 }
