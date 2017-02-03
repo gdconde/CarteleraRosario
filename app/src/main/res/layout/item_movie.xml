@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="4dp"
     android:orientation="vertical"
-    android:padding="16dp"
+    android:padding="8dp"
     android:elevation="4dp"
     app:cardCornerRadius="4dp">
 
@@ -22,7 +22,6 @@
             android:layout_height="match_parent"
             android:layout_weight="4"
             android:scaleType="centerCrop"
-            android:layout_marginRight="8dp"
             />
 
         <LinearLayout
@@ -30,21 +29,28 @@
             android:layout_height="match_parent"
             android:layout_weight="6"
             android:orientation="vertical"
+            android:padding="8dp"
             >
 
             <TextView
                 android:id="@+id/text_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 />
 
             <TextView
                 android:id="@+id/text_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
+                android:textSize="12sp"
+                />
+
+            <TextView
+                android:id="@+id/text_genre"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:textSize="12sp"
                 />
 
@@ -52,8 +58,9 @@
                 android:id="@+id/text_sinopsis"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackground"
-                android:textSize="12sp"
+                android:textSize="13sp"
+                android:maxLines="6"
+                android:ellipsize="end"
                 />
 
         </LinearLayout>

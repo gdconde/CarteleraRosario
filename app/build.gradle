@@ -82,7 +82,6 @@ dependencies {
     compile "com.jakewharton:butterknife:$BUTTERKNIFE_VERSION"
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'org.jsoup:jsoup:1.10.2'
-    compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile  "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2

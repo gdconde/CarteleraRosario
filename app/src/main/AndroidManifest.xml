@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.hitherejoe.mvpboilerplate">
+    package="com.gdconde.cartelerarosario">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".MvpBoilerplateApplication"
+        android:name="com.gdconde.cartelerarosario.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,7 +12,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".ui.main.MainActivity"
+            android:name="com.gdconde.cartelerarosario.ui.main.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -23,7 +23,7 @@
         </activity>
 
         <activity
-            android:name=".ui.detail.DetailActivity"
+            android:name="com.gdconde.cartelerarosario.ui.detail.DetailActivity"
             android:theme="@style/AppTheme.NoActionBar" />
 
     </application>

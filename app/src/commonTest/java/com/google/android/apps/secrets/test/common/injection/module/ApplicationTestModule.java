@@ -3,9 +3,9 @@ package com.google.android.apps.secrets.test.common.injection.module;
 import android.app.Application;
 import android.content.Context;
 
-import com.hitherejoe.mvpboilerplate.data.DataManager;
-import com.hitherejoe.mvpboilerplate.data.remote.MvpBoilerplateService;
-import com.hitherejoe.mvpboilerplate.injection.ApplicationContext;
+import com.gdconde.cartelerarosario.data.DataManager;
+import com.gdconde.cartelerarosario.data.remote.MvpBoilerplateService;
+import com.gdconde.cartelerarosario.injection.ApplicationContext;
 
 import javax.inject.Singleton;
 
