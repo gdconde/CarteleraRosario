@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.gdconde.cartelerarosario.data.DataManager;
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
+import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
 import com.gdconde.cartelerarosario.injection.ApplicationContext;
 import com.gdconde.cartelerarosario.injection.module.ApplicationModule;
@@ -23,4 +24,5 @@ public interface ApplicationComponent {
     DataManager dataManager();
     ElCairoService elCairoService();
     TheMovieDbService theMovieDbService();
+    ShowcaseService showcaseService();
 }

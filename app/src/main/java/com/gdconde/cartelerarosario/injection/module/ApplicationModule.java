@@ -5,6 +5,8 @@ import android.content.Context;
 
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
 import com.gdconde.cartelerarosario.data.remote.ElCairoServiceFactory;
+import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
+import com.gdconde.cartelerarosario.data.remote.ShowcaseServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbServiceFactory;
 import com.gdconde.cartelerarosario.injection.ApplicationContext;
@@ -43,5 +45,11 @@ public class ApplicationModule {
     @Singleton
     TheMovieDbService provideTheMovieDbService() {
         return TheMovieDbServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    ShowcaseService provideShowcaseService() {
+        return ShowcaseServiceFactory.makeSecretsService();
     }
 }

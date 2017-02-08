@@ -55,8 +55,8 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     @Override
                     public void onSuccess(ResponseBody value) {
                         try {
-                            for(String movieUrl : WebParser.parseElCairoMovies(value.string())) {
-                                getElCairoMovie(movieUrl);
+                            for(Movie movie : WebParser.getElCairoMoviesTitles(value.string())) {
+                                getMovieData(movie);
                             }
                         } catch (IOException e) {
                             Timber.e(e, "There was an error fetching El Cairo web");
@@ -80,8 +80,32 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     public void onSuccess(ResponseBody value) {
                         getMvpView().showProgress(false);
                         try {
-                            getMovieData(WebParser.parseElCairoMovie(value.string()));
+                            getMvpView().showMovie(WebParser.getElCairoMovieData(value.string()));
                         } catch (IOException e) {
+                            Timber.e(e, "There was an error fetching El Cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+    public void getShowcaseMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getShowcaseMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for (Movie movie : WebParser.getShowcaseMoviesTitles(value.string())) {
+                                getMovieData(movie);
+                            }
+                        } catch(IOException e) {
                             Timber.e(e, "There was an error fetching El Cairo web");
                         }
                     }
@@ -100,13 +124,15 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         .subscribeOn(Schedulers.io())
         .subscribe(new SingleSubscriber<MovieDbAnswer>() {
             @Override
-            public void onSuccess(MovieDbAnswer value) {
-                value.results.get(0).schedule = movie.schedule;
-                if(value.results.get(0).sinopsis.isEmpty() && !movie.sinopsis.isEmpty()) {
-                    value.results.get(0).sinopsis = movie.sinopsis;
+            public void onSuccess(MovieDbAnswer movieData) {
+                if(movieData.total_results == 0) {
+                    getElCairoMovie(movie.link);
+                    return;
                 }
+                movieData.results.get(0).cinemas = movie.cinemas;
+
                 getMvpView().showProgress(false);
-                getMvpView().showMovie(value.results.get(0));
+                getMvpView().showMovie(movieData.results.get(0));
             }
 
             @Override

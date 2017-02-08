@@ -10,9 +10,22 @@ import java.util.ArrayList;
 
 public class Movie {
 
+    public static final int EL_CAIRO = 0;
+    public static final int SHOWCASE = 1;
+    public static final int HOYTS = 2;
+    public static final int MADRE_CABRINI = 3;
+    public static final int MONUMENTAL = 4;
+    public static final int ARTEON = 5;
+    public static final int DEL_SIGLO = 6;
+    public static final int VILLAGE = 7;
+
     public String title;
 
-    public ArrayList<Long> schedule;
+    public ArrayList<Long> schedule = new ArrayList<>();
+
+    public ArrayList<Integer> cinemas = new ArrayList<>();
+
+    public String link;
 
     @SerializedName("overview")
     public String sinopsis;
@@ -31,7 +44,6 @@ public class Movie {
 
     @SerializedName("original_language")
     public String originalLanguage;
-
 
     @Override
     public boolean equals(Object obj) {

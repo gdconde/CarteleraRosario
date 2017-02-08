@@ -63,25 +63,46 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         holder.movie = movie;
 
         StringBuilder builder = new StringBuilder();
-
-        //Create DateFormat to show timestamp as string
-        DateFormat sdf = new SimpleDateFormat("EEEE dd - HH:mm", new Locale("es", "AR"));
-
-        //TODO: create a method in utils to convert arraylist<timestamp> into a good looking String
-        if(movie.schedule != null && !movie.schedule.isEmpty()) {
-            for (Long timestamp : movie.schedule) {
-                Date date = new Date(timestamp * 1000);
-                builder.append(sdf.format(date));
+        if(movie.cinemas.size() > 0) {
+            switch (movie.cinemas.get(0)) {
+                case Movie.ARTEON: builder.append("Arteón"); break;
+                case Movie.DEL_SIGLO: builder.append("Del Siglo"); break;
+                case Movie.EL_CAIRO: builder.append("El Cairo"); break;
+                case Movie.HOYTS: builder.append("Hoyts"); break;
+                case Movie.MADRE_CABRINI: builder.append("Madre Cabrini"); break;
+                case Movie.MONUMENTAL: builder.append("Monumental"); break;
+                case Movie.SHOWCASE: builder.append("Showcase"); break;
+                case Movie.VILLAGE: builder.append("Village"); break;
             }
-            holder.timeText.setText(builder.toString());
+        }
+        for(int i = 1; i < movie.cinemas.size(); i++) {
+            switch (movie.cinemas.get(i)) {
+                case Movie.ARTEON: builder.append(", Arteón"); break;
+                case Movie.DEL_SIGLO: builder.append(", Del Siglo"); break;
+                case Movie.EL_CAIRO: builder.append(", El Cairo"); break;
+                case Movie.HOYTS: builder.append(", Hoyts"); break;
+                case Movie.MADRE_CABRINI: builder.append(", Madre Cabrini"); break;
+                case Movie.MONUMENTAL: builder.append(", Monumental"); break;
+                case Movie.SHOWCASE: builder.append(", Showcase"); break;
+                case Movie.VILLAGE: builder.append(", Village"); break;
+            }
         }
 
+
+
         //Load data into UI
+        holder.cinemasText.setText(builder.toString());
         holder.titleText.setText(movie.title);
         holder.sinopsisText.setText(movie.sinopsis);
-        holder.genreText.setText(Util.genreIdsToString(movie.genreIds));
+        if(movie.genreIds != null && !movie.genreIds.isEmpty()) {
+            holder.genreText.setText(Util.genreIdsToString(movie.genreIds));
+        } else {
+            holder.genreText.setVisibility(View.GONE);
+        }
         if(movie.posterPath != null) {
             Glide.with(holder.posterImage.getContext()).load("https://image.tmdb.org/t/p/w154"+movie.posterPath).into(holder.posterImage);
+        } else {
+            holder.posterImage.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -93,7 +114,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     class MovieViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.text_title) TextView titleText;
-        @BindView(R.id.text_time) TextView timeText;
+        @BindView(R.id.text_cinemas) TextView cinemasText;
         @BindView(R.id.text_sinopsis) TextView sinopsisText;
         @BindView(R.id.image_poster) ImageView posterImage;
         @BindView(R.id.text_genre) TextView genreText;

@@ -15,7 +15,32 @@ import java.util.ArrayList;
 
 public final class WebParser {
 
-    public static ArrayList<String> parseElCairoMovies(String html) {
+    public static ArrayList<Movie> getElCairoMoviesTitles(String html) {
+        Document document = Jsoup.parse(html);
+
+        //Get movies URLs
+        Elements moviesLinks = document.select("div.dia>ul>li>a[href]");
+
+        //Create an array of movies links
+        ArrayList<Movie> movies = new ArrayList<>();
+        for (Element movieLink : moviesLinks) {
+            String link = movieLink.attr("href");
+            int indexOfSlash = link.lastIndexOf("/");
+            String usefulLink = link.substring(indexOfSlash + 1);
+            String title = movieLink.attr("title");
+            if(title.contains("/")) {
+                title = title.substring(title.lastIndexOf("/"));
+            }
+            Movie movie = new Movie();
+            movie.title = title;
+            movie.cinemas.add(Movie.EL_CAIRO);
+            movie.link = usefulLink;
+            movies.add(movie);
+        }
+        return movies;
+    }
+
+    public static ArrayList<String> getElCairoMoviesLinks(String html) {
         Document document = Jsoup.parse(html);
 
         //Get movies URLs
@@ -32,7 +57,7 @@ public final class WebParser {
         return moviesUrls;
     }
 
-    public static Movie parseElCairoMovie(String html) {
+    public static Movie getElCairoMovieData(String html) {
         Document document = Jsoup.parse(html);
 
         //Create new Movie object
@@ -51,7 +76,24 @@ public final class WebParser {
         //Get movie sinopsis
         movie.sinopsis = document.select("div.sinopsis>div.text").text();
 
+        movie.cinemas.add(Movie.EL_CAIRO);
+
         return movie;
+    }
+
+    public static ArrayList<Movie> getShowcaseMoviesTitles(String html) {
+        Document document = Jsoup.parse(html);
+
+        Elements options = document.select("select#fs-movie-m>option");
+
+        ArrayList<Movie> movies = new ArrayList<>();
+        for(int i = 1; i < options.size(); i++) {
+            Movie movie = new Movie();
+            movie.title = options.get(i).text();
+            movie.cinemas.add(Movie.SHOWCASE);
+            movies.add(movie);
+        }
+        return movies;
     }
 
 }

@@ -59,6 +59,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
         mErrorView.setErrorListener(this);
 
         mMainPresenter.getElCairoMovies();
+        mMainPresenter.getShowcaseMovies();
     }
 
     @Override
