@@ -1,6 +1,7 @@
 package com.gdconde.cartelerarosario.ui.main;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,14 +59,39 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
 
         mErrorView.setErrorListener(this);
 
-        mMainPresenter.getElCairoMovies();
+        /*new CountDownTimer(30000, 5000) {
+            @Override
+            public void onTick(long l) {
+                if(l > 29000) {
+                    mMainPresenter.getShowcaseMovies();
+                } else if(l > 20000) {
+                    mMainPresenter.getElCairoMovies();
+                    mMainPresenter.getHoytsMovies();
+                } else if(l > 10000){
+                    mMainPresenter.getVillageMovies();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();*/
         mMainPresenter.getShowcaseMovies();
+        mMainPresenter.getVillageMovies();
+        mMainPresenter.getHoytsMovies();
+        mMainPresenter.getElCairoMovies();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         mMainPresenter.detachView();
+    }
+
+    @Override
+    public boolean isMovieInList(Movie movie) {
+        return mMoviesAdapter.isMovieInList(movie);
     }
 
     @Override
@@ -120,6 +146,23 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
 
     @Override
     public void onReloadData() {
-        mMainPresenter.getElCairoMovies();
+        new CountDownTimer(30000, 5000) {
+            @Override
+            public void onTick(long l) {
+                if(l > 29000) {
+                    mMainPresenter.getShowcaseMovies();
+                } else if(l > 20000) {
+                    mMainPresenter.getElCairoMovies();
+                    mMainPresenter.getHoytsMovies();
+                } else if(l > 10000){
+                    mMainPresenter.getVillageMovies();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();
     }
 }

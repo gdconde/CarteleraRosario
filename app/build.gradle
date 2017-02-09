@@ -21,6 +21,10 @@ android {
                 "\"${ElCairoUrl}\"")
         buildConfigField("String", "SHOWCASE_URL",
                 "\"${ShowcaseUrl}\"")
+        buildConfigField("String", "HOYTS_URL",
+                "\"${HoytsUrl}\"")
+        buildConfigField("String", "VILLAGE_URL",
+                "\"${VillageUrl}\"")
         buildConfigField("String", "THEMOVIEDB_URL",
                 "\"${TheMovieDbUrl}\"")
         buildConfigField("String", "THEMOVIEDB_APIKEY",

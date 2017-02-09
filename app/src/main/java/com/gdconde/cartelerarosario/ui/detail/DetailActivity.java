@@ -21,7 +21,7 @@ import butterknife.ButterKnife;
 
 public class DetailActivity extends BaseActivity implements DetailMvpView, ErrorView.ErrorListener {
 
-    public static final String EXTRA_POKEMON_NAME = "EXTRA_POKEMON_NAME";
+    public static final String EXTRA_MOVIE_ID = "EXTRA_MOVIE_ID";
 
     @Inject DetailPresenter mDetailPresenter;
 
@@ -32,11 +32,11 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
     @BindView(R.id.layout_stats) LinearLayout mStatLayout;
     @BindView(R.id.layout_pokemon) View mPokemonLayout;
 
-    private String mPokemonName;
+    private String mMovieId;
 
-    public static Intent getStartIntent(Context context, String pokemonName) {
+    public static Intent getStartIntent(Context context, long movieId) {
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(EXTRA_POKEMON_NAME, pokemonName);
+        intent.putExtra(EXTRA_MOVIE_ID, movieId);
         return intent;
     }
 
@@ -48,19 +48,19 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
         ButterKnife.bind(this);
         mDetailPresenter.attachView(this);
 
-        mPokemonName = getIntent().getStringExtra(EXTRA_POKEMON_NAME);
-        if (mPokemonName == null) {
-            throw new IllegalArgumentException("Detail Activity requires a pokemon name@");
+        mMovieId = getIntent().getStringExtra(EXTRA_MOVIE_ID);
+        if (mMovieId == null) {
+            throw new IllegalArgumentException("Detail Activity requires a movie id@");
         }
 
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) actionBar.setDisplayHomeAsUpEnabled(true);
-        setTitle(mPokemonName.substring(0, 1).toUpperCase() + mPokemonName.substring(1));
+        setTitle(mMovieId.substring(0, 1).toUpperCase() + mMovieId.substring(1));
 
         mErrorView.setErrorListener(this);
 
-//        mDetailPresenter.getPokemon(mPokemonName);
+//        mDetailPresenter.getPokemon(mMovieId);
     }
 
     @Override
@@ -100,6 +100,6 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
 
     @Override
     public void onReloadData() {
-//        mDetailPresenter.getPokemon(mPokemonName);
+//        mDetailPresenter.getPokemon(mMovieId);
     }
 }

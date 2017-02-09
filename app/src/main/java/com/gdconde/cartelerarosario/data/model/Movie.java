@@ -1,5 +1,6 @@
 package com.gdconde.cartelerarosario.data.model;
 
+import com.gdconde.cartelerarosario.util.StringSimilarity;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -27,6 +28,8 @@ public class Movie {
 
     public String link;
 
+    public long id;
+
     @SerializedName("overview")
     public String sinopsis;
 
@@ -50,12 +53,8 @@ public class Movie {
         if(!(obj instanceof Movie)) {
             return false;
         } else {
-            if(!((Movie)obj).title.equalsIgnoreCase(title)) {
+            if(StringSimilarity.similarity(((Movie)obj).title, title) < 0.6) {
                 return false;
-            } else {
-                if(!((Movie)obj).schedule.equals(schedule)) {
-                    return false;
-                }
             }
         }
         return true;

@@ -37,12 +37,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         mMovies = movies;
     }
 
-    public void addMovie(Movie movie) {
+    public boolean isMovieInList(Movie movie) {
         if(mMovies.contains(movie)) {
-            return;
-        } else {
-            mMovies.add(movie);
+            int movieIndex = mMovies.indexOf(movie);
+            if(!mMovies.get(movieIndex).cinemas.contains(movie.cinemas.get(0))) {
+                mMovies.get(movieIndex).cinemas.add(movie.cinemas.get(0));
+                notifyDataSetChanged();
+            }
+            return true;
         }
+        return false;
+    }
+
+    public void addMovie(Movie movie) {
+        mMovies.add(movie);
     }
 
     public void setClickListener(ClickListener clickListener) {
@@ -101,6 +109,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         }
         if(movie.posterPath != null) {
             Glide.with(holder.posterImage.getContext()).load("https://image.tmdb.org/t/p/w154"+movie.posterPath).into(holder.posterImage);
+            holder.posterImage.setVisibility(View.VISIBLE);
         } else {
             holder.posterImage.setVisibility(View.INVISIBLE);
         }

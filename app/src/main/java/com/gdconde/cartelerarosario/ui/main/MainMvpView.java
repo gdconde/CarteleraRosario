@@ -13,6 +13,8 @@ public interface MainMvpView extends MvpView {
 
     void showProgress(boolean show);
 
+    boolean isMovieInList(Movie movie);
+
     void showError();
 
 }

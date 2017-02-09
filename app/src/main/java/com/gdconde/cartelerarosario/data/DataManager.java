@@ -1,12 +1,16 @@
 package com.gdconde.cartelerarosario.data;
 
 import com.gdconde.cartelerarosario.BuildConfig;
+import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
+import com.gdconde.cartelerarosario.data.remote.HoytsService;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
+import com.gdconde.cartelerarosario.data.remote.VillageService;
 import com.gdconde.cartelerarosario.util.Util;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -20,15 +24,21 @@ public class DataManager {
 
     private final ElCairoService mElCairoService;
     private final ShowcaseService mShowcaseService;
+    private final HoytsService mHoytsService;
+    private final VillageService mVillageService;
     private final TheMovieDbService mTheMovieDbService;
 
     @Inject
     public DataManager(
-           TheMovieDbService theMovieDbService,
+            TheMovieDbService theMovieDbService,
             ElCairoService elCairoService,
-            ShowcaseService showcaseService) {
+            ShowcaseService showcaseService,
+            VillageService villageService,
+            HoytsService hoytsService) {
         mElCairoService = elCairoService;
         mShowcaseService = showcaseService;
+        mHoytsService = hoytsService;
+        mVillageService = villageService;
         mTheMovieDbService = theMovieDbService;
     }
 
@@ -49,6 +59,14 @@ public class DataManager {
     public Single<MovieDbAnswer> getMovieData(String movieTitle) {
         return mTheMovieDbService
                 .getMovieData(BuildConfig.THEMOVIEDB_APIKEY, "es", movieTitle, "AR");
+    }
+
+    public Single<ArrayList<HoytsAnswer>> getHoytsMovies() {
+        return mHoytsService.getHoytsMovies();
+    }
+
+    public Single<ResponseBody> getVillageMovies() {
+        return mVillageService.getVillageMovies();
     }
 
 }

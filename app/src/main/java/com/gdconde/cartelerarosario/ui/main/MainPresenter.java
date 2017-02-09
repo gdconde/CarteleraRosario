@@ -2,6 +2,7 @@ package com.gdconde.cartelerarosario.ui.main;
 
 
 import com.gdconde.cartelerarosario.data.DataManager;
+import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
 import com.gdconde.cartelerarosario.injection.ConfigPersistent;
@@ -9,6 +10,7 @@ import com.gdconde.cartelerarosario.ui.base.BasePresenter;
 import com.gdconde.cartelerarosario.util.WebParser;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import javax.inject.Inject;
@@ -56,7 +58,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     public void onSuccess(ResponseBody value) {
                         try {
                             for(Movie movie : WebParser.getElCairoMoviesTitles(value.string())) {
-                                getMovieData(movie);
+                                if(!getMvpView().isMovieInList(movie)) {
+                                    getMovieData(movie);
+                                }
                             }
                         } catch (IOException e) {
                             Timber.e(e, "There was an error fetching El Cairo web");
@@ -103,7 +107,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     public void onSuccess(ResponseBody value) {
                         try {
                             for (Movie movie : WebParser.getShowcaseMoviesTitles(value.string())) {
-                                getMovieData(movie);
+                                if(!getMvpView().isMovieInList(movie)) {
+                                    getMovieData(movie);
+                                }
                             }
                         } catch(IOException e) {
                             Timber.e(e, "There was an error fetching El Cairo web");
@@ -117,7 +123,64 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }));
     }
 
-    public void getMovieData(final Movie movie) {
+    public void getHoytsMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getHoytsMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ArrayList<HoytsAnswer>>() {
+                    @Override
+                    public void onSuccess(ArrayList<HoytsAnswer> value) {
+                        for(HoytsAnswer title : value) {
+                            Movie movie = new Movie();
+                            movie.title =
+                                    title.label
+                                            .replace("SUBTITULADA", "")
+                                            .replace("CASTELLANO","")
+                                            .replace("3D","")
+                                            .replace("2D","")
+                                            .trim();
+                            movie.cinemas.add(Movie.HOYTS);
+                            if(!getMvpView().isMovieInList(movie)) {
+                                getMovieData(movie);
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+    public void getVillageMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getVillageMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for (Movie movie : WebParser.getVillageMoviesTitles(value.string())) {
+                                if(!getMvpView().isMovieInList(movie)) {
+                                    getMovieData(movie);
+                                }
+                            }
+                        } catch (IOException e) {
+                            Timber.e(e, "There was an error fetching El Cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+    private void getMovieData(final Movie movie) {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getMovieData(movie.title)
         .observeOn(AndroidSchedulers.mainThread())
@@ -137,7 +200,6 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
             @Override
             public void onError(Throwable error) {
-
             }
         }));
     }

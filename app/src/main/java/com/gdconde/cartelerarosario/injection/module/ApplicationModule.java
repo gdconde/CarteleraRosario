@@ -5,10 +5,14 @@ import android.content.Context;
 
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
 import com.gdconde.cartelerarosario.data.remote.ElCairoServiceFactory;
+import com.gdconde.cartelerarosario.data.remote.HoytsService;
+import com.gdconde.cartelerarosario.data.remote.HoytsServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbServiceFactory;
+import com.gdconde.cartelerarosario.data.remote.VillageService;
+import com.gdconde.cartelerarosario.data.remote.VillageServiceFactory;
 import com.gdconde.cartelerarosario.injection.ApplicationContext;
 
 import javax.inject.Singleton;
@@ -51,5 +55,17 @@ public class ApplicationModule {
     @Singleton
     ShowcaseService provideShowcaseService() {
         return ShowcaseServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    HoytsService provideHoytsService() {
+        return HoytsServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    VillageService provideVillageService() {
+        return VillageServiceFactory.makeSecretsService();
     }
 }

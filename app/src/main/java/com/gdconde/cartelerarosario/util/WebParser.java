@@ -96,5 +96,26 @@ public final class WebParser {
         return movies;
     }
 
+    public static ArrayList<Movie> getVillageMoviesTitles(String html) {
+        Document document = Jsoup.parse(html);
+
+        Elements links = document.select("div.horas-cartelera-estrenos>div>a.modal-pelicula");
+
+        ArrayList<Movie> movies = new ArrayList<>();
+        for(Element element : links) {
+            if(element.hasAttr("id")) continue;
+            Movie movie = new Movie();
+            movie.title = element.text()
+                    .replace("Subt","")
+                    .replace("Cast","")
+                    .replace("3D","")
+                    .replace("4D","")
+                    .replace("2D","").trim();
+            movie.cinemas.add(Movie.VILLAGE);
+            movies.add(movie);
+        }
+        return movies;
+    }
+
 }
 
