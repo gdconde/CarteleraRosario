@@ -28,7 +28,7 @@ public class Movie {
 
     public String link;
 
-    public long id;
+    public String id;
 
     @SerializedName("overview")
     public String sinopsis;
@@ -45,6 +45,11 @@ public class Movie {
     @SerializedName("genre_ids")
     public ArrayList<Integer> genreIds;
 
+    @SerializedName("imdb_id")
+    public String imdbId;
+
+    public int runtime;
+
     @SerializedName("original_language")
     public String originalLanguage;
 
@@ -59,4 +64,29 @@ public class Movie {
         }
         return true;
     }
+
+    /*public class Results {
+        public ArrayList<Videos> results;
+    }
+
+    public class Videos {
+
+        public String id;
+
+        @SerializedName("iso_639_1")
+        public String iso6391;
+
+        @SerializedName("iso_3166_1")
+        public String iso31661;
+
+        public String key;
+
+        public String name;
+
+        public String site;
+
+        public int size;
+
+        public String type;
+    }*/
 }

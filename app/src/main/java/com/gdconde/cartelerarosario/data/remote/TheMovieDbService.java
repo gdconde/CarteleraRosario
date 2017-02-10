@@ -1,8 +1,10 @@
 package com.gdconde.cartelerarosario.data.remote;
 
+import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
 
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Single;
 
@@ -18,5 +20,11 @@ public interface TheMovieDbService {
             @Query("language") String language,
             @Query("query") String movieTitle,
             @Query("region") String countryAlpha
+    );
+
+    @GET("movie/{movieId}")
+    Single<Movie> getMovieDetails(
+            @Path("movieId") String movieId,
+            @Query("api_key") String apiKey
     );
 }

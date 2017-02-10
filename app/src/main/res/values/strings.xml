@@ -14,4 +14,5 @@
     <string name="error_title">Oops</string>
     <string name="error_message">There was a problem loading the pokemon, please try again!</string>
     <string name="error_reload">Reload</string>
+    <string name="movie_backdrop">Movie backdrop</string>
 </resources>

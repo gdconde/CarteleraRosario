@@ -1,6 +1,7 @@
 package com.gdconde.cartelerarosario.util;
 
 import com.gdconde.cartelerarosario.data.model.Genre;
+import com.gdconde.cartelerarosario.data.model.Movie;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -37,14 +38,14 @@ public final class Util {
         return sdf.format(date.getTime());
     }
 
-    public static String genreIdsToString(ArrayList<Integer> genreIds) {
+    public static String genreIdsToString(ArrayList</*Movie.Genre*/Integer> genreIds) {
         StringBuilder builder = new StringBuilder();
         int i = 0;
         for (; i < genreIds.size() - 1; i++) {
-            builder.append(genreIdToString(genreIds.get(i)));
+            builder.append(genreIdToString(genreIds.get(i)/*.id*/));
             builder.append(", ");
         }
-        builder.append(genreIdToString(genreIds.get(i)));
+        builder.append(genreIdToString(genreIds.get(i)/*.id*/));
         return builder.toString();
     }
 

@@ -1,12 +1,11 @@
 package com.gdconde.cartelerarosario.ui.detail;
 
+import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.ui.base.MvpView;
 
 public interface DetailMvpView extends MvpView {
 
-//    void showPokemon(Pokemon pokemon);
-//
-//    void showStat(Statistic statistic);
+    void showMovie(Movie movie);
 
     void showProgress(boolean show);
 

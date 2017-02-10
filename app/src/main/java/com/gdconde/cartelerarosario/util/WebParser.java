@@ -89,8 +89,9 @@ public final class WebParser {
         ArrayList<Movie> movies = new ArrayList<>();
         for(int i = 1; i < options.size(); i++) {
             Movie movie = new Movie();
-            movie.title = options.get(i).text();
+            movie.title = options.get(i).text().replace("3D","").trim();
             movie.cinemas.add(Movie.SHOWCASE);
+            if(movies.contains(movie)) continue;
             movies.add(movie);
         }
         return movies;
@@ -112,6 +113,7 @@ public final class WebParser {
                     .replace("4D","")
                     .replace("2D","").trim();
             movie.cinemas.add(Movie.VILLAGE);
+            if(movies.contains(movie)) continue;
             movies.add(movie);
         }
         return movies;

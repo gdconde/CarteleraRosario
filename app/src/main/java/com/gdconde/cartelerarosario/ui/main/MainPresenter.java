@@ -131,15 +131,20 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 .subscribe(new SingleSubscriber<ArrayList<HoytsAnswer>>() {
                     @Override
                     public void onSuccess(ArrayList<HoytsAnswer> value) {
+                        ArrayList<String> titles = new ArrayList<String>();
                         for(HoytsAnswer title : value) {
+                            String realTitle = title.label.replace("SUBTITULADA", "")
+                                    .replace("CASTELLANO","")
+                                    .replace("3D","")
+                                    .replace("2D","")
+                                    .replace("XD","")
+                                    .trim();
+                            if(titles.contains(realTitle)) {
+                                continue;
+                            }
+                            titles.add(realTitle);
                             Movie movie = new Movie();
-                            movie.title =
-                                    title.label
-                                            .replace("SUBTITULADA", "")
-                                            .replace("CASTELLANO","")
-                                            .replace("3D","")
-                                            .replace("2D","")
-                                            .trim();
+                            movie.title = realTitle;
                             movie.cinemas.add(Movie.HOYTS);
                             if(!getMvpView().isMovieInList(movie)) {
                                 getMovieData(movie);

@@ -136,14 +136,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    if (mClickListener != null) mClickListener.onMovieClick(mMovies);
+                    if (mClickListener != null) mClickListener.onMovieClick(movie);
                 }
             });
         }
     }
 
     public interface ClickListener {
-        void onMovieClick(String movie);
+        void onMovieClick(Movie movie);
     }
 
 }

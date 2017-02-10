@@ -13,6 +13,7 @@ import com.gdconde.cartelerarosario.R;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.ui.base.BaseActivity;
 import com.gdconde.cartelerarosario.ui.common.ErrorView;
+import com.gdconde.cartelerarosario.ui.detail.DetailActivity;
 
 import java.util.ArrayList;
 
@@ -77,10 +78,10 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
 
             }
         }.start();*/
-        mMainPresenter.getShowcaseMovies();
-        mMainPresenter.getVillageMovies();
+//        mMainPresenter.getShowcaseMovies();
+//        mMainPresenter.getVillageMovies();
         mMainPresenter.getHoytsMovies();
-        mMainPresenter.getElCairoMovies();
+//        mMainPresenter.getElCairoMovies();
     }
 
     @Override
@@ -113,8 +114,8 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     @Override
-    public void onMovieClick(String movie) {
-        //TODO show movie detail activity
+    public void onMovieClick(Movie movie) {
+        startActivity(DetailActivity.getStartIntent(this, movie.id));
     }
 
     @Override
