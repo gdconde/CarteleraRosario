@@ -70,36 +70,8 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         Movie movie = mMovies.get(position);
         holder.movie = movie;
 
-        StringBuilder builder = new StringBuilder();
-        if(movie.cinemas.size() > 0) {
-            switch (movie.cinemas.get(0)) {
-                case Movie.ARTEON: builder.append("Arteón"); break;
-                case Movie.DEL_SIGLO: builder.append("Del Siglo"); break;
-                case Movie.EL_CAIRO: builder.append("El Cairo"); break;
-                case Movie.HOYTS: builder.append("Hoyts"); break;
-                case Movie.MADRE_CABRINI: builder.append("Madre Cabrini"); break;
-                case Movie.MONUMENTAL: builder.append("Monumental"); break;
-                case Movie.SHOWCASE: builder.append("Showcase"); break;
-                case Movie.VILLAGE: builder.append("Village"); break;
-            }
-        }
-        for(int i = 1; i < movie.cinemas.size(); i++) {
-            switch (movie.cinemas.get(i)) {
-                case Movie.ARTEON: builder.append(", Arteón"); break;
-                case Movie.DEL_SIGLO: builder.append(", Del Siglo"); break;
-                case Movie.EL_CAIRO: builder.append(", El Cairo"); break;
-                case Movie.HOYTS: builder.append(", Hoyts"); break;
-                case Movie.MADRE_CABRINI: builder.append(", Madre Cabrini"); break;
-                case Movie.MONUMENTAL: builder.append(", Monumental"); break;
-                case Movie.SHOWCASE: builder.append(", Showcase"); break;
-                case Movie.VILLAGE: builder.append(", Village"); break;
-            }
-        }
-
-
-
         //Load data into UI
-        holder.cinemasText.setText(builder.toString());
+        holder.cinemasText.setText(Util.cinemasToString(movie.cinemas));
         holder.titleText.setText(movie.title);
         holder.sinopsisText.setText(movie.sinopsis);
         if(movie.genreIds != null && !movie.genreIds.isEmpty()) {

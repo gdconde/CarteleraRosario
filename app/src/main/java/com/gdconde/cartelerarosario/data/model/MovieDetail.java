@@ -72,6 +72,8 @@ public class MovieDetail {
     @SerializedName("vote_count")
     public Double voteCount;
 
+    public Credits credits;
+
     public Videos videos;
 
 
@@ -129,6 +131,49 @@ public class MovieDetail {
         public Integer id;
 
         public String name;
+    }
 
+    public class Credits {
+
+        public ArrayList<Cast> cast = null;
+
+        public ArrayList<Crew> crew = null;
+    }
+
+    public class Cast {
+
+        @SerializedName("cast_id")
+        public Integer castId;
+
+        public String character;
+
+        @SerializedName("credit_id")
+        public String creditId;
+
+        public Integer id;
+
+        public String name;
+
+        public Integer order;
+
+        @SerializedName("profile_path")
+        public Object profilePath;
+    }
+
+    public class Crew {
+
+        @SerializedName("credit_id")
+        public String creditId;
+
+        public String department;
+
+        public Integer id;
+
+        public String job;
+
+        public String name;
+
+        @SerializedName("profile_path")
+        public Object profilePath;
     }
 }

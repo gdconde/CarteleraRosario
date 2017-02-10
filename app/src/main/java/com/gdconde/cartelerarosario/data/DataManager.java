@@ -72,7 +72,8 @@ public class DataManager {
     }
 
     public Single<MovieDetail> getMovieDetail(String movieId) {
-        return mTheMovieDbService.getMovieDetails(movieId, "es", BuildConfig.THEMOVIEDB_APIKEY);
+        return mTheMovieDbService
+                .getMovieDetails(movieId, "es", BuildConfig.THEMOVIEDB_APIKEY, "credits,videos");
     }
 
 }

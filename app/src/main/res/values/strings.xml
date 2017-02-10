@@ -15,4 +15,10 @@
     <string name="error_message">There was a problem loading the pokemon, please try again!</string>
     <string name="error_reload">Reload</string>
     <string name="movie_backdrop">Movie backdrop</string>
+    <string name="director">Director:</string>
+    <string name="cast">Actores:</string>
+    <string name="country">País:</string>
+    <string name="language">Idioma:</string>
+    <string name="release_date">Fecha de estreno:</string>
+    <string name="runtime">Duración:</string>
 </resources>

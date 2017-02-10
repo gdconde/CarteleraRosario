@@ -26,6 +26,7 @@ public interface TheMovieDbService {
     Single<MovieDetail> getMovieDetails(
             @Path("movieId") String movieId,
             @Query("language") String language,
-            @Query("api_key") String apiKey
+            @Query("api_key") String apiKey,
+            @Query("append_to_response") String appendQueries
     );
 }

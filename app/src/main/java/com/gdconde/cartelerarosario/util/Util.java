@@ -73,6 +73,35 @@ public final class Util {
         return builder.toString();
     }
 
+    public static String cinemasToString(ArrayList<Integer> cinemas) {
+        StringBuilder builder = new StringBuilder();
+        if(cinemas.size() > 0) {
+            switch (cinemas.get(0)) {
+                case Movie.ARTEON: builder.append("Arteón"); break;
+                case Movie.DEL_SIGLO: builder.append("Del Siglo"); break;
+                case Movie.EL_CAIRO: builder.append("El Cairo"); break;
+                case Movie.HOYTS: builder.append("Hoyts"); break;
+                case Movie.MADRE_CABRINI: builder.append("Madre Cabrini"); break;
+                case Movie.MONUMENTAL: builder.append("Monumental"); break;
+                case Movie.SHOWCASE: builder.append("Showcase"); break;
+                case Movie.VILLAGE: builder.append("Village"); break;
+            }
+        }
+        for(int i = 1; i < cinemas.size(); i++) {
+            switch (cinemas.get(i)) {
+                case Movie.ARTEON: builder.append(", Arteón"); break;
+                case Movie.DEL_SIGLO: builder.append(", Del Siglo"); break;
+                case Movie.EL_CAIRO: builder.append(", El Cairo"); break;
+                case Movie.HOYTS: builder.append(", Hoyts"); break;
+                case Movie.MADRE_CABRINI: builder.append(", Madre Cabrini"); break;
+                case Movie.MONUMENTAL: builder.append(", Monumental"); break;
+                case Movie.SHOWCASE: builder.append(", Showcase"); break;
+                case Movie.VILLAGE: builder.append(", Village"); break;
+            }
+        }
+        return builder.toString();
+    }
+
     public static String genreIdToString(int genreId) {
         switch (genreId) {
             case Genre.ACTION: return "Acción";

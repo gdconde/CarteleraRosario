@@ -115,7 +115,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
 
     @Override
     public void onMovieClick(Movie movie) {
-        startActivity(DetailActivity.getStartIntent(this, movie.id));
+        startActivity(DetailActivity.getStartIntent(this, movie.id, movie.cinemas));
     }
 
     @Override
