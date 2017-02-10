@@ -2,6 +2,7 @@ package com.gdconde.cartelerarosario.util;
 
 import com.gdconde.cartelerarosario.data.model.Genre;
 import com.gdconde.cartelerarosario.data.model.Movie;
+import com.gdconde.cartelerarosario.data.model.MovieDetail;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -38,14 +39,37 @@ public final class Util {
         return sdf.format(date.getTime());
     }
 
-    public static String genreIdsToString(ArrayList</*Movie.Genre*/Integer> genreIds) {
+    public static String genreIdsToString(ArrayList<Integer> genreIds) {
         StringBuilder builder = new StringBuilder();
         int i = 0;
         for (; i < genreIds.size() - 1; i++) {
-            builder.append(genreIdToString(genreIds.get(i)/*.id*/));
+            builder.append(genreIdToString(genreIds.get(i)));
             builder.append(", ");
         }
-        builder.append(genreIdToString(genreIds.get(i)/*.id*/));
+        builder.append(genreIdToString(genreIds.get(i)));
+        return builder.toString();
+    }
+
+    public static String genreTextToString(ArrayList<MovieDetail.Genre> genres) {
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for (; i < genres.size() - 1; i++) {
+            builder.append(genres.get(i).name);
+            builder.append(", ");
+        }
+        builder.append(genres.get(i).name);
+        return builder.toString();
+    }
+
+    public static String countryProductionsToString(
+            ArrayList<MovieDetail.ProductionCountry> productionCountries) {
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        for (; i < productionCountries.size() - 1; i++) {
+            builder.append(productionCountries.get(i).name);
+            builder.append(", ");
+        }
+        builder.append(productionCountries.get(i).name);
         return builder.toString();
     }
 

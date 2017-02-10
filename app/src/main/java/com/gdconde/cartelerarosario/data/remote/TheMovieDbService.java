@@ -1,7 +1,7 @@
 package com.gdconde.cartelerarosario.data.remote;
 
-import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
+import com.gdconde.cartelerarosario.data.model.MovieDetail;
 
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -23,8 +23,9 @@ public interface TheMovieDbService {
     );
 
     @GET("movie/{movieId}")
-    Single<Movie> getMovieDetails(
+    Single<MovieDetail> getMovieDetails(
             @Path("movieId") String movieId,
+            @Query("language") String language,
             @Query("api_key") String apiKey
     );
 }

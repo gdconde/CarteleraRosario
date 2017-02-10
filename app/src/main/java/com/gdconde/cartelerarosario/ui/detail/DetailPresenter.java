@@ -3,6 +3,7 @@ package com.gdconde.cartelerarosario.ui.detail;
 
 import com.gdconde.cartelerarosario.data.DataManager;
 import com.gdconde.cartelerarosario.data.model.Movie;
+import com.gdconde.cartelerarosario.data.model.MovieDetail;
 import com.gdconde.cartelerarosario.injection.ConfigPersistent;
 import com.gdconde.cartelerarosario.ui.base.BasePresenter;
 
@@ -46,9 +47,9 @@ public class DetailPresenter extends BasePresenter<DetailMvpView> {
         mSubscriptions.add(mDataManager.getMovieDetail(movieId)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<Movie>() {
+                .subscribe(new SingleSubscriber<MovieDetail>() {
                     @Override
-                    public void onSuccess(Movie value) {
+                    public void onSuccess(MovieDetail value) {
                         getMvpView().showProgress(false);
                         getMvpView().showMovie(value);
                     }

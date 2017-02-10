@@ -20,24 +20,11 @@ public class Movie {
     public static final int DEL_SIGLO = 6;
     public static final int VILLAGE = 7;
 
-    public String title;
-
-    public ArrayList<Long> schedule = new ArrayList<>();
-
-    public ArrayList<Integer> cinemas = new ArrayList<>();
-
-    public String link;
-
-    public String id;
-
-    @SerializedName("overview")
-    public String sinopsis;
-
     @SerializedName("poster_path")
     public String posterPath;
 
-    @SerializedName("backdrop_path")
-    public String backdropPath;
+    @SerializedName("overview")
+    public String sinopsis;
 
     @SerializedName("release_date")
     public String releaseDate;
@@ -45,13 +32,21 @@ public class Movie {
     @SerializedName("genre_ids")
     public ArrayList<Integer> genreIds;
 
-    @SerializedName("imdb_id")
-    public String imdbId;
-
-    public int runtime;
+    public String id;
 
     @SerializedName("original_language")
     public String originalLanguage;
+
+    public String title;
+
+    @SerializedName("backdrop_path")
+    public String backdropPath;
+
+    public ArrayList<Long> schedule = new ArrayList<>();
+
+    public ArrayList<Integer> cinemas = new ArrayList<>();
+
+    public String link;
 
     @Override
     public boolean equals(Object obj) {
@@ -65,28 +60,4 @@ public class Movie {
         return true;
     }
 
-    /*public class Results {
-        public ArrayList<Videos> results;
-    }
-
-    public class Videos {
-
-        public String id;
-
-        @SerializedName("iso_639_1")
-        public String iso6391;
-
-        @SerializedName("iso_3166_1")
-        public String iso31661;
-
-        public String key;
-
-        public String name;
-
-        public String site;
-
-        public int size;
-
-        public String type;
-    }*/
 }

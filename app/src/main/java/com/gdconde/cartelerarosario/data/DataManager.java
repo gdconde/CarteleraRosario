@@ -4,6 +4,7 @@ import com.gdconde.cartelerarosario.BuildConfig;
 import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
+import com.gdconde.cartelerarosario.data.model.MovieDetail;
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
 import com.gdconde.cartelerarosario.data.remote.HoytsService;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
@@ -70,8 +71,8 @@ public class DataManager {
         return mVillageService.getVillageMovies();
     }
 
-    public Single<Movie> getMovieDetail(String movieId) {
-        return mTheMovieDbService.getMovieDetails(movieId, BuildConfig.THEMOVIEDB_APIKEY);
+    public Single<MovieDetail> getMovieDetail(String movieId) {
+        return mTheMovieDbService.getMovieDetails(movieId, "es", BuildConfig.THEMOVIEDB_APIKEY);
     }
 
 }
