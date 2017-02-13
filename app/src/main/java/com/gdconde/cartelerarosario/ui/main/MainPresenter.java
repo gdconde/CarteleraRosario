@@ -122,6 +122,54 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }));
     }
 
+    public void getMonumentalMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getMonumentalMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for(Movie movie : WebParser.getMonumentalMoviesTitles(value.string())) {
+                                getMovieData(movie);
+                            }
+                        } catch(IOException e) {
+                            Timber.e(e, "There was an error fetching El Cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+    public void getDelCentroMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getDelCentroMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for(Movie movie : WebParser.getDelCentroMoviesTitles(value.string())) {
+                                getMovieData(movie);
+                            }
+                        } catch(IOException e) {
+                            Timber.e(e, "There was an error fetching El Cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
     public void getHoytsMovies() {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getHoytsMovies()
@@ -192,14 +240,14 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
         .subscribe(new SingleSubscriber<MovieDbAnswer>() {
             @Override
             public void onSuccess(MovieDbAnswer movieData) {
-                if(movieData.total_results == 0) {
+                /*if(movieData.total_results == 0) {
                     getElCairoMovie(movie.link);
                     return;
-                }
+                }*/
                 movieData.results.get(0).cinemas = movie.cinemas;
-
+                mDataManager.addMovieToDb(movie);
                 getMvpView().showProgress(false);
-                getMvpView().showMovie(movieData.results.get(0));
+//                getMvpView().showMovie(movieData.results.get(0));
             }
 
             @Override

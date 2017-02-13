@@ -50,6 +50,14 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     public void addMovie(Movie movie) {
+        for(Movie movieId : mMovies) {
+            if(movieId.id.equalsIgnoreCase(movie.id)) {
+                if(!movieId.cinemas.contains(movie.cinemas.get(0))) {
+                    movieId.cinemas.add(movie.cinemas.get(0));
+                    notifyDataSetChanged();
+                }
+            }
+        }
         mMovies.add(movie);
     }
 
