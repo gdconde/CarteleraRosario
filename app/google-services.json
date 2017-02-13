@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "538420231196",
+    "firebase_url": "https://cartelera-rosario.firebaseio.com",
+    "project_id": "cartelera-rosario",
+    "storage_bucket": "cartelera-rosario.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:538420231196:android:69e92d43dfdca03a",
+        "android_client_info": {
+          "package_name": "com.gdconde.cartelerarosario"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "538420231196-f5sk352d4j0oteqc7dk8jbkh3qsr7ulo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCU7ZYOJX-KMiWLWsDpReR2Dk5IwKIeO6Q"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

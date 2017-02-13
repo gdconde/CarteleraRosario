@@ -7,7 +7,7 @@ android {
     buildToolsVersion "23.0.3"
     compileOptions.incremental = false
     defaultConfig {
-        applicationId "com.hitherejoe.mvpboilerplate"
+        applicationId "com.gdconde.cartelerarosario"
         minSdkVersion 21
         targetSdkVersion 25
         testInstrumentationRunner "${applicationId}.runner.RxAndroidJUnitRunner"
@@ -65,6 +65,7 @@ dependencies {
     final ESPRESSO_VERSION = '2.2.2'
     final RUNNER_VERSION = '0.4'
     final BUTTERKNIFE_VERSION = '8.0.1'
+    final FIREBASE_VERSION = '10.0.1'
 
     def daggerCompiler = "com.google.dagger:dagger-compiler:$DAGGER_VERSION"
     def jUnit = "junit:junit:4.12"
@@ -91,6 +92,8 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.1.0'
     compile 'org.jsoup:jsoup:1.10.2'
 
+    compile "com.google.firebase:firebase-core:$FIREBASE_VERSION"
+    compile "com.google.firebase:firebase-config:$FIREBASE_VERSION"
     compile  "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
 
@@ -130,3 +133,5 @@ dependencies {
 tasks.matching {it instanceof Test}.all {
     testLogging.events = ["failed", "passed", "skipped"]
 }
+
+apply plugin: 'com.google.gms.google-services'

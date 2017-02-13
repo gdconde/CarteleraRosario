@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>showcase_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>hoyts_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>village_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>monumental_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>el_cairo_enabled</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>del_centro_enabled</key>
+        <value>false</value>
+    </entry>
+</defaultsMap>
+    <!-- END xml_defaults -->
