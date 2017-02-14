@@ -245,9 +245,9 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     return;
                 }*/
                 movieData.results.get(0).cinemas = movie.cinemas;
-                mDataManager.addMovieToDb(movie);
+//                mDataManager.addMovieToDb(movie);
                 getMvpView().showProgress(false);
-//                getMvpView().showMovie(movieData.results.get(0));
+                getMvpView().showMovie(movieData.results.get(0));
             }
 
             @Override

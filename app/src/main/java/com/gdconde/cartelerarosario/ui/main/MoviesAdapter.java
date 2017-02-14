@@ -110,20 +110,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         public Movie movie;
 
-        public MovieViewHolder(View itemView) {
+        public MovieViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mClickListener != null) mClickListener.onMovieClick(movie);
+                    if (mClickListener != null) mClickListener.onMovieClick(itemView, movie);
                 }
             });
         }
     }
 
     public interface ClickListener {
-        void onMovieClick(Movie movie);
+        void onMovieClick(View view, Movie movie);
     }
 
 }

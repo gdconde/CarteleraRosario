@@ -7,11 +7,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.gdconde.cartelerarosario.injection.ApplicationContext;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by gdconde on 13/2/17.
  */
 
+@Singleton
 public class DbOpenHelper extends SQLiteOpenHelper {
 
     public static final String DATABASE_NAME = "cartelera_rosario.db";
@@ -27,6 +29,7 @@ public class DbOpenHelper extends SQLiteOpenHelper {
         db.beginTransaction();
         try {
             db.execSQL(Db.MoviesTable.CREATE);
+            // Add other tables here
             db.setTransactionSuccessful();
         } finally {
             db.endTransaction();

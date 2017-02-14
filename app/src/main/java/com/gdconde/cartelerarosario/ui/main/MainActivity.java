@@ -1,5 +1,7 @@
 package com.gdconde.cartelerarosario.ui.main;
 
+import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -124,7 +126,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     @Override
-    public void onMovieClick(Movie movie) {
+    public void onMovieClick(View view, Movie movie) {
         startActivity(DetailActivity.getStartIntent(this, movie.id, movie.cinemas));
     }
 
