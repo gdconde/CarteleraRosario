@@ -1,6 +1,5 @@
 package com.gdconde.cartelerarosario.ui.main;
 
-
 import com.gdconde.cartelerarosario.data.DataManager;
 import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
 import com.gdconde.cartelerarosario.data.model.Movie;
