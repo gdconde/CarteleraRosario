@@ -98,6 +98,7 @@ dependencies {
 
     compile "com.google.firebase:firebase-core:$FIREBASE_VERSION"
     compile "com.google.firebase:firebase-config:$FIREBASE_VERSION"
+    compile "com.google.firebase:firebase-messaging:$FIREBASE_VERSION"
     compile  "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
 

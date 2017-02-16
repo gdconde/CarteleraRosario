@@ -49,6 +49,12 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         return false;
     }
 
+    public void addAll(ArrayList<Movie> movies) {
+        mMovies.clear();
+        mMovies.addAll(movies);
+        notifyDataSetChanged();
+    }
+
     public void addMovie(Movie movie) {
         for(Movie movieId : mMovies) {
             if(movieId.id.equalsIgnoreCase(movie.id)) {
@@ -59,6 +65,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
             }
         }
         mMovies.add(movie);
+        notifyDataSetChanged();
     }
 
     public void setClickListener(ClickListener clickListener) {

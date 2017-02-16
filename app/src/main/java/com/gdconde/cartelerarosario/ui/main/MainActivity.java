@@ -239,6 +239,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     private void setCinemasAvailable() {
+        mMainPresenter.getMoviesFromDb();
         if(mFirebaseRemoteConfig.getBoolean("showcase_enabled")) {
             mMainPresenter.getShowcaseMovies();
         }

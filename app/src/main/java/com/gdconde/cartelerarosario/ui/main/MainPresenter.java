@@ -11,10 +11,13 @@ import com.gdconde.cartelerarosario.util.WebParser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
+import rx.Observable;
+import rx.Observer;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -235,7 +238,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     private void getMovieData(final Movie movie) {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getMovieData(movie.title)
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(Schedulers.io())
         .subscribeOn(Schedulers.io())
         .subscribe(new SingleSubscriber<MovieDbAnswer>() {
             @Override
@@ -245,13 +248,52 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                     return;
                 }*/
                 movieData.results.get(0).cinemas = movie.cinemas;
-//                mDataManager.addMovieToDb(movie);
+                mSubscriptions.add(mDataManager.addMovieToDb(movieData.results.get(0))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Observer<Movie>() {
+                            @Override
+                            public void onCompleted() {
+
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(Movie movie) {
+
+                            }
+                        }));
                 getMvpView().showProgress(false);
-                getMvpView().showMovie(movieData.results.get(0));
+//                getMvpView().showMovie(movieData.results.get(0));
             }
 
             @Override
             public void onError(Throwable error) {
+            }
+        }));
+    }
+
+    public void getMoviesFromDb() {
+        mSubscriptions.add(mDataManager.getMoviesFromDb()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new Observer<List<Movie>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<Movie> movies) {
+                getMvpView().showMovies((ArrayList<Movie>) movies);
             }
         }));
     }

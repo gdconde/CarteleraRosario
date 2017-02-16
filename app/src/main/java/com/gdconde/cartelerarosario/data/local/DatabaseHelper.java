@@ -58,6 +58,25 @@ public class DatabaseHelper {
         });
     }
 
+    public Observable<Movie> addMovie(final Movie movie) {
+        return Observable.create(new Observable.OnSubscribe<Movie>() {
+            @Override
+            public void call(Subscriber<? super Movie> subscriber) {
+                if(subscriber.isUnsubscribed()) return;
+                BriteDatabase.Transaction transaction = mDb.newTransaction();
+                try {
+                    mDb.insert(Db.MoviesTable.TABLE_NAME,
+                            Db.MoviesTable.toContentValues(movie),
+                            SQLiteDatabase.CONFLICT_REPLACE);
+                    transaction.markSuccessful();
+                    subscriber.onCompleted();
+                } finally {
+                    transaction.end();
+                }
+            }
+        });
+    }
+
     public Observable<List<Movie>> getMovies() {
         return mDb.createQuery(Db.MoviesTable.TABLE_NAME,
                 "SELECT * FROM " + Db.MoviesTable.TABLE_NAME)

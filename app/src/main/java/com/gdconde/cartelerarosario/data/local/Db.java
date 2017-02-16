@@ -29,16 +29,16 @@ public class Db {
 
         public static final String CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
-                        COLUMN_ID + " TEXT PRIMARY KEY," +
-                        COLUMN_TITLE + " TEXT NOT NULL," +
-                        COLUMN_POSTER + " TEXT," +
-                        COLUMN_BACKDROP + " TEXT," +
-                        COLUMN_SINOPSIS + " TEXT," +
-                        COLUMN_RELEASE_DATE + " TEXT," +
-                        COLUMN_GENRES + " TEXT," +
-                        COLUMN_LANGUAGE + " TEXT," +
-                        COLUMN_SCHEDULE + " TEXT," +
-                        COLUMN_CINEMAS + " TEXT" +
+                        COLUMN_ID + " TEXT PRIMARY KEY, " +
+                        COLUMN_TITLE + " TEXT NOT NULL, " +
+                        COLUMN_POSTER + " TEXT, " +
+                        COLUMN_BACKDROP + " TEXT, " +
+                        COLUMN_SINOPSIS + " TEXT, " +
+                        COLUMN_RELEASE_DATE + " TEXT, " +
+//                        COLUMN_GENRES + " TEXT," +
+                        COLUMN_LANGUAGE + " TEXT" +
+                        /*COLUMN_SCHEDULE + " TEXT," +
+                        COLUMN_CINEMAS + " TEXT" +*/
                         " );";
 
         public static ContentValues toContentValues(Movie movie) {

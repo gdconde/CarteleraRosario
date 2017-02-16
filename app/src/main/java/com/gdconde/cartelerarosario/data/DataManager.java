@@ -17,11 +17,13 @@ import com.gdconde.cartelerarosario.util.Util;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import okhttp3.ResponseBody;
+import rx.Observable;
 import rx.Single;
 
 @Singleton
@@ -95,8 +97,12 @@ public class DataManager {
         return mDelCentroService.getDelCentroMovies();
     }
 
-    public void addMovieToDb(Movie movie) {
-        mDatabaseHelper.addMovie(movie);
+    public Observable<Movie> addMovieToDb(Movie movie) {
+        return mDatabaseHelper.addMovie(movie);
+    }
+
+    public Observable<List<Movie>> getMoviesFromDb() {
+        return mDatabaseHelper.getMovies();
     }
 
 }
