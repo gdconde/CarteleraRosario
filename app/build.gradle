@@ -23,6 +23,10 @@ android {
                 "\"${ShowcaseUrl}\"")
         buildConfigField("String", "HOYTS_URL",
                 "\"${HoytsUrl}\"")
+        buildConfigField("String", "MONUMENTAL_URL",
+                "\"${MonumentalUrl}\"")
+        buildConfigField("String", "DELCENTRO_URL",
+                "\"${DelCentroUrl}\"")
         buildConfigField("String", "VILLAGE_URL",
                 "\"${VillageUrl}\"")
         buildConfigField("String", "THEMOVIEDB_URL",
@@ -94,6 +98,7 @@ dependencies {
 
     compile "com.google.firebase:firebase-core:$FIREBASE_VERSION"
     compile "com.google.firebase:firebase-config:$FIREBASE_VERSION"
+    compile "com.google.firebase:firebase-messaging:$FIREBASE_VERSION"
     compile  "com.google.dagger:dagger:$DAGGER_VERSION"
     provided 'org.glassfish:javax.annotation:10.0-b28' //Required by Dagger2
 

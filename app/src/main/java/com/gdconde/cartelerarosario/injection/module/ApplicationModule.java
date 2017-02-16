@@ -3,10 +3,14 @@ package com.gdconde.cartelerarosario.injection.module;
 import android.app.Application;
 import android.content.Context;
 
+import com.gdconde.cartelerarosario.data.remote.DelCentroService;
+import com.gdconde.cartelerarosario.data.remote.DelCentroServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
 import com.gdconde.cartelerarosario.data.remote.ElCairoServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.HoytsService;
 import com.gdconde.cartelerarosario.data.remote.HoytsServiceFactory;
+import com.gdconde.cartelerarosario.data.remote.MonumentalService;
+import com.gdconde.cartelerarosario.data.remote.MonumentalServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseServiceFactory;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
@@ -67,5 +71,17 @@ public class ApplicationModule {
     @Singleton
     VillageService provideVillageService() {
         return VillageServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    MonumentalService provideMonumentalService() {
+        return MonumentalServiceFactory.makeSecretsService();
+    }
+
+    @Provides
+    @Singleton
+    DelCentroService provideDelCentroService() {
+        return DelCentroServiceFactory.makeSecretsService();
     }
 }

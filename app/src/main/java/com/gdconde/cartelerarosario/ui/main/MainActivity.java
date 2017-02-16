@@ -1,5 +1,7 @@
 package com.gdconde.cartelerarosario.ui.main;
 
+import android.app.Activity;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
@@ -69,6 +71,29 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
         mMoviesRecycler.setAdapter(mMoviesAdapter);
 
         mErrorView.setErrorListener(this);
+
+       /* new CountDownTimer(60000, 2000) {
+            @Override
+            public void onTick(long l) {
+                if(l > 57000) {
+                    mMainPresenter.getShowcaseMovies();
+                } else if(l > 45000) {
+                    mMainPresenter.getElCairoMovies();
+                    mMainPresenter.getDelCentroMovies();
+                } else if(l > 32000){
+                    mMainPresenter.getVillageMovies();
+                } else if(l > 20000){
+                    mMainPresenter.getHoytsMovies();
+                } else if(l > 8000){
+                    mMainPresenter.getMonumentalMovies();
+                }
+            }
+
+            @Override
+            public void onFinish() {
+
+            }
+        }.start();*/
     }
 
     @Override
@@ -101,7 +126,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     @Override
-    public void onMovieClick(Movie movie) {
+    public void onMovieClick(View view, Movie movie) {
         startActivity(DetailActivity.getStartIntent(this, movie.id, movie.cinemas));
     }
 
@@ -134,16 +159,20 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
 
     @Override
     public void onReloadData() {
-        new CountDownTimer(30000, 5000) {
+        new CountDownTimer(60000, 2000) {
             @Override
             public void onTick(long l) {
-                if(l > 29000) {
+                if(l > 57000) {
                     mMainPresenter.getShowcaseMovies();
-                } else if(l > 20000) {
+                } else if(l > 45000) {
                     mMainPresenter.getElCairoMovies();
-                    mMainPresenter.getHoytsMovies();
-                } else if(l > 10000){
+                    mMainPresenter.getDelCentroMovies();
+                } else if(l > 32000){
                     mMainPresenter.getVillageMovies();
+                } else if(l > 20000){
+                    mMainPresenter.getHoytsMovies();
+                } else if(l > 8000){
+                    mMainPresenter.getMonumentalMovies();
                 }
             }
 
@@ -210,6 +239,7 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     private void setCinemasAvailable() {
+        mMainPresenter.getMoviesFromDb();
         if(mFirebaseRemoteConfig.getBoolean("showcase_enabled")) {
             mMainPresenter.getShowcaseMovies();
         }

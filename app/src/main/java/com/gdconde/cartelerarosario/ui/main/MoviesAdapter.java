@@ -49,8 +49,23 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
         return false;
     }
 
+    public void addAll(ArrayList<Movie> movies) {
+        mMovies.clear();
+        mMovies.addAll(movies);
+        notifyDataSetChanged();
+    }
+
     public void addMovie(Movie movie) {
+        for(Movie movieId : mMovies) {
+            if(movieId.id.equalsIgnoreCase(movie.id)) {
+                if(!movieId.cinemas.contains(movie.cinemas.get(0))) {
+                    movieId.cinemas.add(movie.cinemas.get(0));
+                    notifyDataSetChanged();
+                }
+            }
+        }
         mMovies.add(movie);
+        notifyDataSetChanged();
     }
 
     public void setClickListener(ClickListener clickListener) {
@@ -102,20 +117,20 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
 
         public Movie movie;
 
-        public MovieViewHolder(View itemView) {
+        public MovieViewHolder(final View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mClickListener != null) mClickListener.onMovieClick(movie);
+                    if (mClickListener != null) mClickListener.onMovieClick(itemView, movie);
                 }
             });
         }
     }
 
     public interface ClickListener {
-        void onMovieClick(Movie movie);
+        void onMovieClick(View view, Movie movie);
     }
 
 }
