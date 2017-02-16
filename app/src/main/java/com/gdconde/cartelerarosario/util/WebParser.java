@@ -81,6 +81,37 @@ public final class WebParser {
         return movie;
     }
 
+    public static ArrayList<Movie> getMonumentalMoviesTitles(String html) {
+        Document document = Jsoup.parse(html);
+
+        Elements elements = document.select("td.twoColFixRtHdr>strong");
+
+        ArrayList<Movie> movies = new ArrayList<>();
+        for(Element element : elements) {
+            Movie movie = new Movie();
+            String title = element.text();
+            movie.title = title.substring(title.indexOf(":"));
+            movie.cinemas.add(Movie.MONUMENTAL);
+            movies.add(movie);
+        }
+        return movies;
+    }
+
+    public static ArrayList<Movie> getDelCentroMoviesTitles(String html) {
+        Document document = Jsoup.parse(html);
+
+        Elements elements = document.select("div.peli>h5>a");
+
+        ArrayList<Movie> movies = new ArrayList<>();
+        for(Element element : elements) {
+            Movie movie = new Movie();
+            movie.title = element.text();
+            movie.cinemas.add(Movie.DEL_SIGLO);
+            movies.add(movie);
+        }
+        return movies;
+    }
+
     public static ArrayList<Movie> getShowcaseMoviesTitles(String html) {
         Document document = Jsoup.parse(html);
 

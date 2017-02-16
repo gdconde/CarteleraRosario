@@ -4,8 +4,10 @@ import android.app.Application;
 import android.content.Context;
 
 import com.gdconde.cartelerarosario.data.DataManager;
+import com.gdconde.cartelerarosario.data.remote.DelCentroService;
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
 import com.gdconde.cartelerarosario.data.remote.HoytsService;
+import com.gdconde.cartelerarosario.data.remote.MonumentalService;
 import com.gdconde.cartelerarosario.data.remote.ShowcaseService;
 import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
 import com.gdconde.cartelerarosario.data.remote.VillageService;
@@ -29,4 +31,6 @@ public interface ApplicationComponent {
     ShowcaseService showcaseService();
     HoytsService hoytsService();
     VillageService villageService();
+    MonumentalService monumentalService();
+    DelCentroService delCentroService();
 }

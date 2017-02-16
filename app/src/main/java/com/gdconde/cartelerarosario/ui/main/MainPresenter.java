@@ -11,10 +11,13 @@ import com.gdconde.cartelerarosario.util.WebParser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
+import rx.Observable;
+import rx.Observer;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -122,6 +125,54 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
                 }));
     }
 
+    public void getMonumentalMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getMonumentalMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for(Movie movie : WebParser.getMonumentalMoviesTitles(value.string())) {
+                                getMovieData(movie);
+                            }
+                        } catch(IOException e) {
+                            Timber.e(e, "There was an error fetching El Cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
+    public void getDelCentroMovies() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getDelCentroMovies()
+                .observeOn(Schedulers.io())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new SingleSubscriber<ResponseBody>() {
+                    @Override
+                    public void onSuccess(ResponseBody value) {
+                        try {
+                            for(Movie movie : WebParser.getDelCentroMoviesTitles(value.string())) {
+                                getMovieData(movie);
+                            }
+                        } catch(IOException e) {
+                            Timber.e(e, "There was an error fetching El Cairo web");
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable error) {
+
+                    }
+                }));
+    }
+
     public void getHoytsMovies() {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getHoytsMovies()
@@ -187,23 +238,62 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
     private void getMovieData(final Movie movie) {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getMovieData(movie.title)
-        .observeOn(AndroidSchedulers.mainThread())
+        .observeOn(Schedulers.io())
         .subscribeOn(Schedulers.io())
         .subscribe(new SingleSubscriber<MovieDbAnswer>() {
             @Override
             public void onSuccess(MovieDbAnswer movieData) {
-                if(movieData.total_results == 0) {
+                /*if(movieData.total_results == 0) {
                     getElCairoMovie(movie.link);
                     return;
-                }
+                }*/
                 movieData.results.get(0).cinemas = movie.cinemas;
+                mSubscriptions.add(mDataManager.addMovieToDb(movieData.results.get(0))
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Observer<Movie>() {
+                            @Override
+                            public void onCompleted() {
 
+                            }
+
+                            @Override
+                            public void onError(Throwable e) {
+
+                            }
+
+                            @Override
+                            public void onNext(Movie movie) {
+
+                            }
+                        }));
                 getMvpView().showProgress(false);
-                getMvpView().showMovie(movieData.results.get(0));
+//                getMvpView().showMovie(movieData.results.get(0));
             }
 
             @Override
             public void onError(Throwable error) {
+            }
+        }));
+    }
+
+    public void getMoviesFromDb() {
+        mSubscriptions.add(mDataManager.getMoviesFromDb()
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new Observer<List<Movie>>() {
+            @Override
+            public void onCompleted() {
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onNext(List<Movie> movies) {
+                getMvpView().showMovies((ArrayList<Movie>) movies);
             }
         }));
     }
