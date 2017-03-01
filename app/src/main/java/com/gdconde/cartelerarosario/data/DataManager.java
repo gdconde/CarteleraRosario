@@ -15,6 +15,7 @@ import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
 import com.gdconde.cartelerarosario.data.remote.VillageService;
 import com.gdconde.cartelerarosario.util.Util;
 
+import java.io.ObjectStreamException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -103,6 +104,10 @@ public class DataManager {
 
     public Observable<List<Movie>> getMoviesFromDb() {
         return mDatabaseHelper.getMovies();
+    }
+
+    public Observable<Boolean> isMoviesTableEmptyOrOutdated() {
+        return Observable.just(mDatabaseHelper.isMoviesTableEmptyOrOutdated());
     }
 
 }

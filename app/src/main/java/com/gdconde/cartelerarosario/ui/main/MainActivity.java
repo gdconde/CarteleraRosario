@@ -1,9 +1,6 @@
 package com.gdconde.cartelerarosario.ui.main;
 
-import android.app.Activity;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.support.annotation.NonNull;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.gdconde.cartelerarosario.BuildConfig;
 import com.gdconde.cartelerarosario.R;
@@ -31,19 +29,24 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class MainActivity extends BaseActivity implements MainMvpView, MoviesAdapter.ClickListener,
-        ErrorView.ErrorListener {
+public class MainActivity extends BaseActivity implements MainMvpView, MoviesAdapter.ClickListener {
 
     @Inject MoviesAdapter mMoviesAdapter;
     @Inject MainPresenter mMainPresenter;
 
-    @BindView(R.id.view_error) ErrorView mErrorView;
     @BindView(R.id.progress) ProgressBar mProgress;
+    @BindView(R.id.progress_text) TextView mProgressText;
     @BindView(R.id.recycler_movies) RecyclerView mMoviesRecycler;
     @BindView(R.id.swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.toolbar) Toolbar mToolbar;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
+    private boolean showcaseEnabled;
+    private boolean elCairoEnabled;
+    private boolean hoytsEnabled;
+    private boolean villageEnabled;
+    private boolean delCentroEnabled;
+    private boolean monumentalEnabled;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,38 +65,14 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        mMainPresenter.getElCairoMovies();
+                        mMainPresenter.getMovies(showcaseEnabled, elCairoEnabled, hoytsEnabled, villageEnabled,
+                                delCentroEnabled, monumentalEnabled);
                     }
                 });
 
         mMoviesAdapter.setClickListener(this);
         mMoviesRecycler.setLayoutManager(new LinearLayoutManager(this));
         mMoviesRecycler.setAdapter(mMoviesAdapter);
-
-        mErrorView.setErrorListener(this);
-
-       /* new CountDownTimer(60000, 2000) {
-            @Override
-            public void onTick(long l) {
-                if(l > 57000) {
-                    mMainPresenter.getShowcaseMovies();
-                } else if(l > 45000) {
-                    mMainPresenter.getElCairoMovies();
-                    mMainPresenter.getDelCentroMovies();
-                } else if(l > 32000){
-                    mMainPresenter.getVillageMovies();
-                } else if(l > 20000){
-                    mMainPresenter.getHoytsMovies();
-                } else if(l > 8000){
-                    mMainPresenter.getMonumentalMovies();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();*/
     }
 
     @Override
@@ -133,54 +112,22 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     @Override
     public void showProgress(boolean show) {
         if (show) {
-            if (mMoviesRecycler.getVisibility() == View.VISIBLE
-                    && mMoviesAdapter.getItemCount() > 0) {
-                mSwipeRefreshLayout.setRefreshing(true);
-            } else {
-                mProgress.setVisibility(View.VISIBLE);
-
-                mMoviesRecycler.setVisibility(View.GONE);
-                mSwipeRefreshLayout.setVisibility(View.GONE);
-            }
-
-            mErrorView.setVisibility(View.GONE);
+            mProgress.setVisibility(View.VISIBLE);
+            mProgressText.setVisibility(View.VISIBLE);
+            mMoviesRecycler.setVisibility(View.GONE);
+            mSwipeRefreshLayout.setVisibility(View.GONE);
         } else {
-            mSwipeRefreshLayout.setRefreshing(false);
             mProgress.setVisibility(View.GONE);
+            mProgressText.setVisibility(View.GONE);
+            mMoviesRecycler.setVisibility(View.VISIBLE);
+            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+            mSwipeRefreshLayout.setRefreshing(false);
         }
     }
 
     @Override
-    public void showError() {
-        mMoviesRecycler.setVisibility(View.GONE);
-        mSwipeRefreshLayout.setVisibility(View.GONE);
-        mErrorView.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void onReloadData() {
-        new CountDownTimer(60000, 2000) {
-            @Override
-            public void onTick(long l) {
-                if(l > 57000) {
-                    mMainPresenter.getShowcaseMovies();
-                } else if(l > 45000) {
-                    mMainPresenter.getElCairoMovies();
-                    mMainPresenter.getDelCentroMovies();
-                } else if(l > 32000){
-                    mMainPresenter.getVillageMovies();
-                } else if(l > 20000){
-                    mMainPresenter.getHoytsMovies();
-                } else if(l > 8000){
-                    mMainPresenter.getMonumentalMovies();
-                }
-            }
-
-            @Override
-            public void onFinish() {
-
-            }
-        }.start();
+    public void showProgressText(String text) {
+        mProgressText.setText(String.format("Obteniendo películas del cine %1$s", text));
     }
 
     public void getRemoteConfig() {
@@ -239,9 +186,13 @@ public class MainActivity extends BaseActivity implements MainMvpView, MoviesAda
     }
 
     private void setCinemasAvailable() {
-        mMainPresenter.getMoviesFromDb();
-        if(mFirebaseRemoteConfig.getBoolean("showcase_enabled")) {
-            mMainPresenter.getShowcaseMovies();
-        }
+        showcaseEnabled = mFirebaseRemoteConfig.getBoolean("showcase_enabled");
+        elCairoEnabled = mFirebaseRemoteConfig.getBoolean("el_cairo_enabled");
+        hoytsEnabled = mFirebaseRemoteConfig.getBoolean("hoyts_enabled");
+        villageEnabled = mFirebaseRemoteConfig.getBoolean("village_enabled");
+        delCentroEnabled = mFirebaseRemoteConfig.getBoolean("del_centro_enabled");
+        monumentalEnabled = mFirebaseRemoteConfig.getBoolean("monumental_enabled");
+        mMainPresenter.getMovies(showcaseEnabled, elCairoEnabled, hoytsEnabled, villageEnabled,
+                delCentroEnabled, monumentalEnabled);
     }
 }

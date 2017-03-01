@@ -5,8 +5,10 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.squareup.sqlbrite.BriteDatabase;
+import com.squareup.sqlbrite.QueryObservable;
 import com.squareup.sqlbrite.SqlBrite;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
@@ -35,6 +37,28 @@ public class DatabaseHelper {
     public BriteDatabase getBriteDb() {
         return mDb;
     }
+
+    public boolean isMoviesTableEmptyOrOutdated() {
+        Cursor cursor1 = mDb.query("SELECT count(*) FROM " + Db.MoviesTable.TABLE_NAME);
+        cursor1.moveToFirst();
+        boolean isMoviesTableEmpty = cursor1.getInt(0) == 0;
+        if (isMoviesTableEmpty) return true;
+
+        Cursor cursor2 = mDb.query("SELECT count(*) FROM " + Db.MoviesTable.TABLE_NAME +
+                " WHERE " + Db.MoviesTable.COLUMN_UPDATE_TIME + " = null");
+        cursor2.moveToFirst();
+        boolean isMoviesTableBadlyFilled = cursor2.getInt(0) > 0;
+        if (isMoviesTableBadlyFilled) return true;
+
+        Cursor cursor3 = mDb.query("SELECT MAX(" + Db.MoviesTable.COLUMN_UPDATE_TIME + ") FROM " +
+                Db.MoviesTable.TABLE_NAME);
+        cursor3.moveToFirst();
+        long timeWithoutUpdate = Calendar.getInstance().getTimeInMillis() / 1000 -
+                cursor3.getLong(0);
+        return timeWithoutUpdate > 7 * 24 * 60 * 60;
+
+    }
+
 
     public Observable<Movie> addMovies(final Collection<Movie> newMovies) {
         return Observable.create(new Observable.OnSubscribe<Movie>() {

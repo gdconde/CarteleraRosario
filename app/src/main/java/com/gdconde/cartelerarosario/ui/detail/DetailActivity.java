@@ -61,9 +61,9 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
     @BindView(R.id.text_tagline) TextView mTaglineText;
 
     private String mMovieId;
-    private ArrayList<Integer> mCinemas;
+    private ArrayList<String> mCinemas;
 
-    public static Intent getStartIntent(Context context, String movieId, ArrayList<Integer> cinemas) {
+    public static Intent getStartIntent(Context context, String movieId, ArrayList<String> cinemas) {
         Intent intent = new Intent(context, DetailActivity.class);
         intent.putExtra(EXTRA_MOVIE_ID, movieId);
         intent.putExtra(EXTRA_CINEMAS, cinemas);
@@ -83,7 +83,7 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
         if (mMovieId == null) {
             throw new IllegalArgumentException("Detail Activity requires a movie id@");
         }
-        mCinemas = getIntent().getIntegerArrayListExtra(EXTRA_CINEMAS);
+        mCinemas = getIntent().getStringArrayListExtra(EXTRA_CINEMAS);
         if (mCinemas == null) {
             throw new IllegalArgumentException("Detail Activity requires movie cinemas@");
         }

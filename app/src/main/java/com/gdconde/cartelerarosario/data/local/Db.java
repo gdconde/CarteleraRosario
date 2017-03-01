@@ -5,6 +5,11 @@ import android.database.Cursor;
 
 import com.gdconde.cartelerarosario.data.model.Movie;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+
 /**
  * Created by gdconde on 13/2/17.
  */
@@ -26,6 +31,7 @@ public class Db {
         public static final String COLUMN_LANGUAGE = "language";
         public static final String COLUMN_SCHEDULE = "schedule";
         public static final String COLUMN_CINEMAS = "cinemas";
+        public static final String COLUMN_UPDATE_TIME = "updateTime";
 
         public static final String CREATE =
                 "CREATE TABLE " + TABLE_NAME + " (" +
@@ -35,10 +41,11 @@ public class Db {
                         COLUMN_BACKDROP + " TEXT, " +
                         COLUMN_SINOPSIS + " TEXT, " +
                         COLUMN_RELEASE_DATE + " TEXT, " +
-//                        COLUMN_GENRES + " TEXT," +
-                        COLUMN_LANGUAGE + " TEXT" +
-                        /*COLUMN_SCHEDULE + " TEXT," +
-                        COLUMN_CINEMAS + " TEXT" +*/
+                        COLUMN_GENRES + " TEXT, " +
+                        COLUMN_LANGUAGE + " TEXT, " +
+                        COLUMN_SCHEDULE + " TEXT, " +
+                        COLUMN_CINEMAS + " TEXT, " +
+                        COLUMN_UPDATE_TIME + " LONG" +
                         " );";
 
         public static ContentValues toContentValues(Movie movie) {
@@ -49,7 +56,11 @@ public class Db {
             values.put(COLUMN_BACKDROP, movie.backdropPath);
             values.put(COLUMN_SINOPSIS, movie.sinopsis);
             values.put(COLUMN_RELEASE_DATE, movie.releaseDate);
+            values.put(COLUMN_GENRES, movie.genreIds.toString());
             values.put(COLUMN_LANGUAGE, movie.originalLanguage);
+            values.put(COLUMN_SCHEDULE, movie.schedule.toString());
+            values.put(COLUMN_CINEMAS, movie.cinemas.toString());
+            values.put(COLUMN_UPDATE_TIME, Calendar.getInstance().getTimeInMillis() / 1000);
             return values;
         }
 
@@ -61,7 +72,35 @@ public class Db {
             movie.backdropPath = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_BACKDROP));
             movie.sinopsis = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SINOPSIS));
             movie.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RELEASE_DATE));
+            movie.genreIds =
+                    new ArrayList<String>(
+                            Arrays.asList(
+                                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_GENRES))
+                                            .replace("[","")
+                                            .replace("]","")
+                                            .replace(" ","")
+                                            .split(",")));
+            if (movie.genreIds.get(0).equalsIgnoreCase("")) movie.genreIds = null;
             movie.originalLanguage = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LANGUAGE));
+            movie.schedule =
+                    new ArrayList<String>(
+                            Arrays.asList(
+                                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SCHEDULE))
+                                            .replace("[","")
+                                            .replace("]","")
+                                            .replace(" ","")
+                                            .split(",")));
+            if (movie.schedule.get(0).equalsIgnoreCase("")) movie.schedule = null;
+            movie.cinemas =
+                    new ArrayList<String>(
+                            Arrays.asList(
+                                    cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CINEMAS))
+                                            .replace("[","")
+                                            .replace("]","")
+                                            .replace(" ","")
+                                            .split(",")));
+            if (movie.cinemas.get(0).equalsIgnoreCase("")) movie.cinemas = null;
+            movie.updateTime = cursor.getLong(cursor.getColumnIndexOrThrow(COLUMN_UPDATE_TIME));
             return movie;
         }
     }

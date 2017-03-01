@@ -71,7 +71,7 @@ public final class WebParser {
         //Get movie schedule
         String scheduled = document.select("div.details>ul>li").text();
         String month = document.select("div.rightcol>div.sidemenu>a").attr("title");
-        movie.schedule.add(ElCairoDateCreator.stringToTimestamp(scheduled, month));
+        movie.schedule.add(ElCairoDateCreator.stringToTimestamp(scheduled, month).toString());
 
         //Get movie sinopsis
         movie.sinopsis = document.select("div.sinopsis>div.text").text();

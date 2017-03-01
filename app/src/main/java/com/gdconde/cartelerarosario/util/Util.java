@@ -39,14 +39,14 @@ public final class Util {
         return sdf.format(date.getTime());
     }
 
-    public static String genreIdsToString(ArrayList<Integer> genreIds) {
+    public static String genreIdsToString(ArrayList<String> genreIds) {
         StringBuilder builder = new StringBuilder();
         int i = 0;
         for (; i < genreIds.size() - 1; i++) {
-            builder.append(genreIdToString(genreIds.get(i)));
+            builder.append(genreIdToString(Integer.valueOf(genreIds.get(i))));
             builder.append(", ");
         }
-        builder.append(genreIdToString(genreIds.get(i)));
+        builder.append(genreIdToString(Integer.valueOf(genreIds.get(i))));
         return builder.toString();
     }
 
@@ -73,7 +73,7 @@ public final class Util {
         return builder.toString();
     }
 
-    public static String cinemasToString(ArrayList<Integer> cinemas) {
+    public static String cinemasToString(ArrayList<String> cinemas) {
         StringBuilder builder = new StringBuilder();
         if(cinemas.size() > 0) {
             switch (cinemas.get(0)) {

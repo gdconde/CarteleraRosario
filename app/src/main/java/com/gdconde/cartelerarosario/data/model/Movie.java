@@ -11,14 +11,14 @@ import java.util.ArrayList;
 
 public class Movie {
 
-    public static final int EL_CAIRO = 0;
-    public static final int SHOWCASE = 1;
-    public static final int HOYTS = 2;
-    public static final int MADRE_CABRINI = 3;
-    public static final int MONUMENTAL = 4;
-    public static final int ARTEON = 5;
-    public static final int DEL_SIGLO = 6;
-    public static final int VILLAGE = 7;
+    public static final String EL_CAIRO = "0";
+    public static final String SHOWCASE = "1";
+    public static final String HOYTS = "2";
+    public static final String MADRE_CABRINI = "3";
+    public static final String MONUMENTAL = "4";
+    public static final String ARTEON = "5";
+    public static final String DEL_SIGLO = "6";
+    public static final String VILLAGE = "7";
 
     @SerializedName("poster_path")
     public String posterPath;
@@ -30,7 +30,7 @@ public class Movie {
     public String releaseDate;
 
     @SerializedName("genre_ids")
-    public ArrayList<Integer> genreIds;
+    public ArrayList<String> genreIds;
 
     public String id;
 
@@ -42,11 +42,13 @@ public class Movie {
     @SerializedName("backdrop_path")
     public String backdropPath;
 
-    public ArrayList<Long> schedule = new ArrayList<>();
+    public ArrayList<String> schedule = new ArrayList<>();
 
-    public ArrayList<Integer> cinemas = new ArrayList<>();
+    public ArrayList<String> cinemas = new ArrayList<>();
 
     public String link;
+
+    public Long updateTime;
 
     @Override
     public boolean equals(Object obj) {
