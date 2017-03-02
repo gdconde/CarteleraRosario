@@ -7,13 +7,5 @@ import java.util.ArrayList;
 
 public interface MainMvpView extends MvpView {
 
-    void showMovies(ArrayList<Movie> movies);
 
-    void showMovie(Movie movie);
-
-    void showProgress(boolean show);
-
-    void showProgressText(String text);
-
-    boolean isMovieInList(Movie movie);
 }

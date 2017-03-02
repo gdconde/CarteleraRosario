@@ -239,18 +239,25 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-    <com.gdconde.cartelerarosario.ui.common.ErrorView
-        android:id="@+id/view_error"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
-
-    <ProgressBar
-        android:id="@+id/progress"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:paddingBottom="?attr/actionBarSize"
-        android:visibility="gone" />
+        android:layout_gravity="center">
+
+        <com.gdconde.cartelerarosario.ui.common.ErrorView
+            android:id="@+id/view_error"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:paddingBottom="?attr/actionBarSize"
+            android:visibility="gone" />
+
+    </RelativeLayout>
 
 </android.support.design.widget.CoordinatorLayout>

@@ -38,15 +38,17 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     }
 
     public boolean isMovieInList(Movie movie) {
+        return mMovies.contains(movie);
+    }
+
+    public void updateMovie(Movie movie) {
         if(mMovies.contains(movie)) {
-            int movieIndex = mMovies.indexOf(movie);
-            if(!mMovies.get(movieIndex).cinemas.contains(movie.cinemas.get(0))) {
-                mMovies.get(movieIndex).cinemas.add(movie.cinemas.get(0));
+            int index = mMovies.indexOf(movie);
+            if(!mMovies.get(index).cinemas.contains(movie.cinemas.get(0))) {
+                mMovies.get(index).cinemas.add(movie.cinemas.get(0));
                 notifyDataSetChanged();
             }
-            return true;
         }
-        return false;
     }
 
     public void addAll(ArrayList<Movie> movies) {

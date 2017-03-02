@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:id="@+id/villageLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/villageTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Village"
+                />
+
+            <TextView
+                android:id="@+id/villageAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Av. Eva Perón (ex Córdoba) 5856  y Cuba"
+                />
+
+            <TextView
+                android:id="@+id/villageFeatures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Estacionamiento, Compra online, Salas 3D, Salas 4D"
+                />
+
+            <TextView
+                android:id="@+id/villagePrices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="General: 150\nNiños: 110\nMiércoles: 110\nSalas 3D: General 180, Miércoles 130"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hoytsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/hoytsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Village"
+                />
+
+            <TextView
+                android:id="@+id/hoytsAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Av. Eva Perón (ex Córdoba) 5856  y Cuba"
+                />
+
+            <TextView
+                android:id="@+id/hoytsFeatures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Estacionamiento, Compra online, Salas 3D, Salas 4D"
+                />
+
+            <TextView
+                android:id="@+id/hoytsPrices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="General: 150\nNiños: 110\nMiércoles: 110\nSalas 3D: General 180, Miércoles 130"
+                />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/showcaseLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:orientation="vertical"
+            >
+
+            <TextView
+                android:id="@+id/showcaseTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Village"
+                />
+
+            <TextView
+                android:id="@+id/showcaseAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Av. Eva Perón (ex Córdoba) 5856  y Cuba"
+                />
+
+            <TextView
+                android:id="@+id/showcaseFeatures"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Estacionamiento, Compra online, Salas 3D, Salas 4D"
+                />
+
+            <TextView
+                android:id="@+id/showcasePrices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="General: 150\nNiños: 110\nMiércoles: 110\nSalas 3D: General 180, Miércoles 130"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

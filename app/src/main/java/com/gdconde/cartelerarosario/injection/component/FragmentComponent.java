@@ -2,6 +2,8 @@ package com.gdconde.cartelerarosario.injection.component;
 
 import com.gdconde.cartelerarosario.injection.PerFragment;
 import com.gdconde.cartelerarosario.injection.module.FragmentModule;
+import com.gdconde.cartelerarosario.ui.main.CinemasFragment;
+import com.gdconde.cartelerarosario.ui.main.MoviesFragment;
 
 import dagger.Subcomponent;
 
@@ -11,5 +13,6 @@ import dagger.Subcomponent;
 @PerFragment
 @Subcomponent(modules = FragmentModule.class)
 public interface FragmentComponent {
-
+    void inject(MoviesFragment moviesFragment);
+    void inject(CinemasFragment cinemasFragment);
 }
