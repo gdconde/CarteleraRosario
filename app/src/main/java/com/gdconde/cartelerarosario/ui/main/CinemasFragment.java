@@ -17,16 +17,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 /**
  * Created by gdconde on 2/3/17.
  */
 
 public class CinemasFragment extends BaseFragment {
-
-    private static final String TAG = CinemasFragment.class.getCanonicalName();
 
     @BindView(R.id.villageTitle) TextView mVillageTitleText;
     @BindView(R.id.villageAddress) TextView mVillageAddressText;
@@ -58,13 +59,13 @@ public class CinemasFragment extends BaseFragment {
                     mVillageFeaturesText.setText("Estacionamiento, Salas 3D, Salas 4D");
                     mVillagePricesText.setText("General: 150, Niños: 110");
                 }
-                Log.d("TAG", "Value is: " + village);
+                Timber.d("Value is: %s", village);
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 // Failed to read value
-                Log.w("TAG", "Failed to read value.", databaseError.toException());
+                Timber.w("Failed to read value: %s", databaseError.toException());
             }
         });
     }

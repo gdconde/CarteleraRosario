@@ -4,6 +4,7 @@ import com.gdconde.cartelerarosario.data.DataManager;
 import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
+import com.gdconde.cartelerarosario.data.model.VillageAnswer;
 import com.gdconde.cartelerarosario.ui.base.BasePresenter;
 import com.gdconde.cartelerarosario.util.WebParser;
 
@@ -51,8 +52,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private void getElCairoMovies() {
         checkViewAttached();
-//        getMvpView().showProgress(true);
-//        getMvpView().showProgressText("El Cairo");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         mSubscriptions.add(mDataManager.getElCairoMovies(calendar)
@@ -61,12 +60,15 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 .subscribe(new SingleSubscriber<ResponseBody>() {
                     @Override
                     public void onSuccess(ResponseBody value) {
+                        Timber.i("El Cairo Movies FETCHED");
                         getMvpView().showProgress(false);
                         try {
                             for(Movie movie : WebParser.getElCairoMoviesTitles(value.string())) {
                                 if(!getMvpView().isMovieInList(movie)) {
+                                    Timber.i("%s not in list.", movie.title);
                                     getMovieData(movie);
                                 } else {
+                                    Timber.i("%s already in list.", movie.title);
                                     getMvpView().updateMovie(movie);
                                 }
                             }
@@ -84,23 +86,22 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private void getShowcaseMovies() {
         checkViewAttached();
-        getMvpView().showProgress(true);
-        getMvpView().showProgressText("Showcase");
         mSubscriptions.add(mDataManager.getShowcaseMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ResponseBody>() {
                     @Override
                     public void onSuccess(ResponseBody value) {
+                        Timber.i("Showcase Movies FETCHED");
                         try {
                             getMvpView().showProgress(false);
                             for (Movie movie : WebParser.getShowcaseMoviesTitles(value.string())) {
                                 if(!getMvpView().isMovieInList(movie)) {
-                                    if(!getMvpView().isMovieInList(movie)) {
-                                        getMovieData(movie);
-                                    } else {
-                                        getMvpView().updateMovie(movie);
-                                    }
+                                    Timber.i("%s not in list.", movie.title);
+                                    getMovieData(movie);
+                                } else {
+                                    getMvpView().updateMovie(movie);
+                                    Timber.i("%s already in list.", movie.title);
                                 }
                             }
                         } catch(IOException e) {
@@ -123,16 +124,20 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 .subscribe(new SingleSubscriber<ResponseBody>() {
                     @Override
                     public void onSuccess(ResponseBody value) {
+                        getMvpView().showProgress(false);
+                        Timber.i("Monumental Movies FETCHED");
                         try {
                             for(Movie movie : WebParser.getMonumentalMoviesTitles(value.string())) {
                                 if(!getMvpView().isMovieInList(movie)) {
+                                    Timber.i("%s not in list.", movie.title);
                                     getMovieData(movie);
                                 } else {
+                                    Timber.i("%s already in list.", movie.title);
                                     getMvpView().updateMovie(movie);
                                 }
                             }
                         } catch(IOException e) {
-                            Timber.e(e, "There was an error fetching El Cairo web");
+                            Timber.e(e, "There was an error fetching Monumental web");
                         }
                     }
 
@@ -211,24 +216,22 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private void getVillageMovies() {
         checkViewAttached();
-//        getMvpView().showProgress(true);
-//        getMvpView().showProgressText("Village");
         mSubscriptions.add(mDataManager.getVillageMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ResponseBody>() {
+                .subscribe(new SingleSubscriber<VillageAnswer>() {
                     @Override
-                    public void onSuccess(ResponseBody value) {
-                        try {
-                            for (Movie movie : WebParser.getVillageMoviesTitles(value.string())) {
-                                if(!getMvpView().isMovieInList(movie)) {
-                                    getMovieData(movie);
-                                } else {
-                                    getMvpView().updateMovie(movie);
-                                }
+                    public void onSuccess(VillageAnswer titles) {
+                        getMvpView().showProgress(false);
+                        for (VillageAnswer.VillageMovie villageMovie : titles.data) {
+                            Movie movie = new Movie();
+                            movie.title = villageMovie.title_translated;
+                            movie.cinemas.add(Movie.VILLAGE);
+                            if(!getMvpView().isMovieInList(movie)) {
+                                getMovieData(movie);
+                            } else {
+                                getMvpView().updateMovie(movie);
                             }
-                        } catch (IOException e) {
-                            Timber.e(e, "There was an error fetching El Cairo web");
                         }
                     }
 
@@ -241,14 +244,14 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private void getMovieData(final Movie movie) {
         checkViewAttached();
-//        getMvpView().showProgress(true);
-//        getMvpView().showProgressText("");
+        Timber.i("Obtaining %s data", movie.title);
         mSubscriptions.add(mDataManager.getMovieData(movie.title)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<MovieDbAnswer>() {
                     @Override
                     public void onSuccess(MovieDbAnswer movieData) {
+                        Timber.i("%s data obtained", movieData.results.get(0).title);
                         movieData.results.get(0).cinemas = movie.cinemas;
                         if(movieData.results.get(0).genreIds.isEmpty()) return;
                         mSubscriptions.add(mDataManager.addMovieToDb(movieData.results.get(0))
@@ -267,10 +270,10 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
                                     @Override
                                     public void onNext(Movie movie) {
+                                        Timber.i("%s added to DB", movie.title);
                                         getMvpView().addMovie(movie);
                                     }
                                 }));
-//                    getMvpView().showProgress(false);
                     }
 
                     @Override
@@ -281,7 +284,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private void getMoviesFromDb() {
         checkViewAttached();
-        getMvpView().showProgress(true);
         mSubscriptions.add(mDataManager.getMoviesFromDb()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -326,12 +328,12 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getMovies(final boolean showcaseEnabled,
-                          final boolean elCairoEnabled,
-                          final boolean hoytsEnabled,
-                          final boolean villageEnabled,
-                          final boolean delCentroEnabled,
-                          final boolean monumentalEnabled) {
+    public void getMoviesFromDbOrNetwork(final boolean showcaseEnabled,
+                                         final boolean elCairoEnabled,
+                                         final boolean hoytsEnabled,
+                                         final boolean villageEnabled,
+                                         final boolean delCentroEnabled,
+                                         final boolean monumentalEnabled) {
         checkViewAttached();
         mSubscriptions.add(mDataManager.isMoviesTableEmptyOrOutdated()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -350,6 +352,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     @Override
                     public void onNext(Boolean isMoviesTableEmptyOrOutdated) {
                         if (isMoviesTableEmptyOrOutdated) {
+                            Timber.i("Movie Table EMPTY or OUTDATED");
                             if(showcaseEnabled) getShowcaseMovies();
                             if(elCairoEnabled) getElCairoMovies();
                             if(hoytsEnabled) getHoytsMovies();
@@ -357,9 +360,25 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                             if(delCentroEnabled) getDelCentroMovies();
                             if(monumentalEnabled) getMonumentalMovies();
                         } else {
+                            Timber.i("Movies fetched from DB");
                             getMoviesFromDb();
                         }
                     }
                 }));
+    }
+
+    public void getMoviesFromNetwork(boolean showcaseEnabled,
+                                     boolean elCairoEnabled,
+                                     boolean hoytsEnabled,
+                                     boolean villageEnabled,
+                                     boolean delCentroEnabled,
+                                     boolean monumentalEnabled) {
+        checkViewAttached();
+        if(showcaseEnabled) getShowcaseMovies();
+        if(elCairoEnabled) getElCairoMovies();
+        if(hoytsEnabled) getHoytsMovies();
+        if(villageEnabled) getVillageMovies();
+        if(delCentroEnabled) getDelCentroMovies();
+        if(monumentalEnabled) getMonumentalMovies();
     }
 }

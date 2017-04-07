@@ -12,11 +12,7 @@ import com.gdconde.cartelerarosario.R;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.util.Util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import javax.inject.Inject;
 

@@ -59,12 +59,13 @@ public class MoviesFragment extends BaseFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentComponent().inject(this);
-        getRemoteConfig();
+        getRemoteConfig(false);
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_movies, container, false);
         ButterKnife.bind(this, view);
         mMoviesPresenter.attachView(this);
@@ -74,8 +75,7 @@ public class MoviesFragment extends BaseFragment
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        mMoviesPresenter.getMovies(showcaseEnabled, elCairoEnabled, hoytsEnabled, villageEnabled,
-                                delCentroEnabled, monumentalEnabled);
+                        getRemoteConfig(true);
                     }
                 });
 
@@ -141,7 +141,7 @@ public class MoviesFragment extends BaseFragment
         mProgressText.setText(String.format("Obteniendo películas del cine %1$s", text));
     }
 
-    public void getRemoteConfig() {
+    public void getRemoteConfig(final boolean fromNetworkOnly) {
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         // Create Remote Config Setting to enable developer mode.
@@ -163,7 +163,6 @@ public class MoviesFragment extends BaseFragment
         // here or you can set defaults inline by using one of the other setDefaults methods.S
         // [START set_default_values]
         mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
-        // [END set_default_values]
 
         long cacheExpiration = 3600; // 1 hour in seconds.
         // If in developer mode cacheExpiration is set to 0 so each fetch will retrieve values from
@@ -182,28 +181,48 @@ public class MoviesFragment extends BaseFragment
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
-                            Timber.i("Fetch Succeeded");
-
-                            // Once the config is successfully fetched it must be activated before newly fetched
-                            // values are returned.
+                            Timber.i("Firebase Fetch Succeeded");
+                            // Once the config is successfully fetched it must be activated before
+                            // newly fetched values are returned.
                             mFirebaseRemoteConfig.activateFetched();
                         } else {
-                            Timber.e("Fetch Failed");
+                            Timber.e("Firebase Fetch Failed");
                         }
-                        setCinemasAvailable();
+                        setCinemasAvailable(fromNetworkOnly);
                     }
                 });
-        // [END fetch_config_with_callback]
     }
 
-    private void setCinemasAvailable() {
+    private void setCinemasAvailable(boolean fromNetworkOnly) {
         showcaseEnabled = mFirebaseRemoteConfig.getBoolean("showcase_enabled");
         elCairoEnabled = mFirebaseRemoteConfig.getBoolean("el_cairo_enabled");
         hoytsEnabled = mFirebaseRemoteConfig.getBoolean("hoyts_enabled");
         villageEnabled = mFirebaseRemoteConfig.getBoolean("village_enabled");
         delCentroEnabled = mFirebaseRemoteConfig.getBoolean("del_centro_enabled");
         monumentalEnabled = mFirebaseRemoteConfig.getBoolean("monumental_enabled");
-        mMoviesPresenter.getMovies(showcaseEnabled, elCairoEnabled, hoytsEnabled, villageEnabled,
-                delCentroEnabled, monumentalEnabled);
+
+        if(fromNetworkOnly) {
+            mMoviesPresenter.getMoviesFromNetwork(showcaseEnabled,
+                    elCairoEnabled,
+                    hoytsEnabled,
+                    villageEnabled,
+                    delCentroEnabled,
+                    monumentalEnabled);
+        } else {
+            mMoviesPresenter.getMoviesFromDbOrNetwork(showcaseEnabled,
+                    elCairoEnabled,
+                    hoytsEnabled,
+                    villageEnabled,
+                    delCentroEnabled,
+                    monumentalEnabled);
+        }
+
+        Timber.i("Cinemas Enabled: %s %s %s %s %s %s",
+                showcaseEnabled ? "Showcase":"",
+                elCairoEnabled ? "El Cairo":"",
+                hoytsEnabled ? "Hoyts":"",
+                villageEnabled ? "Village":"",
+                delCentroEnabled ? "Del Centro":"",
+                monumentalEnabled ? "Monumental":"");
     }
 }

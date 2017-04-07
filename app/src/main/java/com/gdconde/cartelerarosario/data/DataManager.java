@@ -6,6 +6,7 @@ import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDbAnswer;
 import com.gdconde.cartelerarosario.data.model.MovieDetail;
+import com.gdconde.cartelerarosario.data.model.VillageAnswer;
 import com.gdconde.cartelerarosario.data.remote.DelCentroService;
 import com.gdconde.cartelerarosario.data.remote.ElCairoService;
 import com.gdconde.cartelerarosario.data.remote.HoytsService;
@@ -81,7 +82,7 @@ public class DataManager {
         return mHoytsService.getHoytsMovies();
     }
 
-    public Single<ResponseBody> getVillageMovies() {
+    public Single<VillageAnswer> getVillageMovies() {
         return mVillageService.getVillageMovies();
     }
 

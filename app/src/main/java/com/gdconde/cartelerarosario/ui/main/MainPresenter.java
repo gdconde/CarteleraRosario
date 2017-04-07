@@ -31,7 +31,7 @@ public class MainPresenter extends BasePresenter<MainMvpView> {
 
     @Inject
     public MainPresenter(DataManager dataManager) {
-        mDataManager = dataManager;
+        this.mDataManager = dataManager;
     }
 
     @Override

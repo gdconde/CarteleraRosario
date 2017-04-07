@@ -1,5 +1,7 @@
 package com.gdconde.cartelerarosario.data.remote;
 
+import com.gdconde.cartelerarosario.data.model.VillageAnswer;
+
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import rx.Single;
@@ -10,6 +12,6 @@ import rx.Single;
 
 public interface VillageService {
 
-    @GET("cines-rosario")
-    Single<ResponseBody> getVillageMovies();
+    @GET("api/showtimes?complex=4&date=2017-04-07")
+    Single<VillageAnswer> getVillageMovies();
 }

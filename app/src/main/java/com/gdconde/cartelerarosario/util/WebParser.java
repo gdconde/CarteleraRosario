@@ -9,6 +9,8 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 
+import timber.log.Timber;
+
 /**
  * Created by gdconde on 1/2/17.
  */
@@ -16,6 +18,7 @@ import java.util.ArrayList;
 public final class WebParser {
 
     public static ArrayList<Movie> getElCairoMoviesTitles(String html) {
+        Timber.i("Parsing El Cairo Movies");
         Document document = Jsoup.parse(html);
 
         //Get movies URLs
@@ -23,19 +26,24 @@ public final class WebParser {
 
         //Create an array of movies links
         ArrayList<Movie> movies = new ArrayList<>();
-        for (Element movieLink : moviesLinks) {
-            String link = movieLink.attr("href");
-            int indexOfSlash = link.lastIndexOf("/");
-            String usefulLink = link.substring(indexOfSlash + 1);
-            String title = movieLink.attr("title");
-            if(title.contains("/")) {
-                title = title.substring(title.lastIndexOf("/"));
+        if(moviesLinks.size() == 0) {
+            Timber.i("El Cairo: PARSING PROBLEM NO MOVIES FOUND");
+        } else {
+            for (Element movieLink : moviesLinks) {
+                String link = movieLink.attr("href");
+                int indexOfSlash = link.lastIndexOf("/");
+                String usefulLink = link.substring(indexOfSlash + 1);
+                String title = movieLink.attr("title");
+                if (title.contains("/")) {
+                    title = title.substring(title.lastIndexOf("/") + 1).trim();
+                }
+                Timber.i("El Cairo: %s found", title);
+                Movie movie = new Movie();
+                movie.title = title;
+                movie.cinemas.add(Movie.EL_CAIRO);
+                movie.link = usefulLink;
+                movies.add(movie);
             }
-            Movie movie = new Movie();
-            movie.title = title;
-            movie.cinemas.add(Movie.EL_CAIRO);
-            movie.link = usefulLink;
-            movies.add(movie);
         }
         return movies;
     }
@@ -82,17 +90,23 @@ public final class WebParser {
     }
 
     public static ArrayList<Movie> getMonumentalMoviesTitles(String html) {
+        Timber.i("Parsing Monumental Movies");
         Document document = Jsoup.parse(html);
 
         Elements elements = document.select("td.twoColFixRtHdr>strong");
 
         ArrayList<Movie> movies = new ArrayList<>();
-        for(Element element : elements) {
-            Movie movie = new Movie();
-            String title = element.text();
-            movie.title = title.substring(title.indexOf(":"));
-            movie.cinemas.add(Movie.MONUMENTAL);
-            movies.add(movie);
+        if(elements.size() == 0) {
+            Timber.i("Monumental: PARSING PROBLEM NO MOVIES FOUND");
+        } else {
+            for (Element element : elements) {
+                Movie movie = new Movie();
+                String title = element.text();
+                movie.title = title.substring(title.indexOf(":") + 1).trim();
+                Timber.i("Monumental: %s found", movie.title);
+                movie.cinemas.add(Movie.MONUMENTAL);
+                movies.add(movie);
+            }
         }
         return movies;
     }
@@ -113,6 +127,7 @@ public final class WebParser {
     }
 
     public static ArrayList<Movie> getShowcaseMoviesTitles(String html) {
+        Timber.i("Parsing Showcase Movies");
         Document document = Jsoup.parse(html);
 
         Elements options = document.select("select#fs-movie-m>option");
@@ -121,6 +136,7 @@ public final class WebParser {
         for(int i = 1; i < options.size(); i++) {
             Movie movie = new Movie();
             movie.title = options.get(i).text().replace("3D","").trim();
+            Timber.i("Showcase: %s found", movie.title);
             movie.cinemas.add(Movie.SHOWCASE);
             if(movies.contains(movie)) continue;
             movies.add(movie);
@@ -128,24 +144,30 @@ public final class WebParser {
         return movies;
     }
 
+    // Not in use
     public static ArrayList<Movie> getVillageMoviesTitles(String html) {
+        Timber.i("Parsing Village Movies");
         Document document = Jsoup.parse(html);
 
         Elements links = document.select("div.horas-cartelera-estrenos>div>a.modal-pelicula");
-
         ArrayList<Movie> movies = new ArrayList<>();
-        for(Element element : links) {
-            if(element.hasAttr("id")) continue;
-            Movie movie = new Movie();
-            movie.title = element.text()
-                    .replace("Subt","")
-                    .replace("Cast","")
-                    .replace("3D","")
-                    .replace("4D","")
-                    .replace("2D","").trim();
-            movie.cinemas.add(Movie.VILLAGE);
-            if(movies.contains(movie)) continue;
-            movies.add(movie);
+        if(links.size() == 0) {
+            Timber.i("Village: PARSING PROBLEM NO MOVIES FOUND");
+        } else {
+            for (Element element : links) {
+                if (element.hasAttr("id")) continue;
+                Movie movie = new Movie();
+                movie.title = element.text()
+                        .replace("Subt", "")
+                        .replace("Cast", "")
+                        .replace("3D", "")
+                        .replace("4D", "")
+                        .replace("2D", "").trim();
+                Timber.i("Village: %s found", movie.title);
+                movie.cinemas.add(Movie.VILLAGE);
+                if (movies.contains(movie)) continue;
+                movies.add(movie);
+            }
         }
         return movies;
     }

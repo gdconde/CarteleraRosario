@@ -51,6 +51,7 @@ public abstract class BaseFragment extends Fragment {
             configPersistentComponent = sComponentsMap.get(mFragmentId);
         }
         mFragmentComponent = configPersistentComponent.fragmentComponent(new FragmentModule(this));
+        mFragmentComponent.inject(this);
     }
 
     @Override
