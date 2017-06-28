@@ -11,12 +11,10 @@ import com.gdconde.cartelerarosario.util.WebParser;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import javax.inject.Inject;
 
 import okhttp3.ResponseBody;
-import rx.Observer;
 import rx.SingleSubscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -50,7 +48,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
         mSubscriptions = null;
     }
 
-    private void getElCairoMovies() {
+    public void getElCairoMovies() {
         checkViewAttached();
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
@@ -61,7 +59,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     @Override
                     public void onSuccess(ResponseBody value) {
                         Timber.i("El Cairo Movies FETCHED");
-                        getMvpView().showProgress(false);
                         try {
                             for(Movie movie : WebParser.getElCairoMoviesTitles(value.string())) {
                                 if(!getMvpView().isMovieInList(movie)) {
@@ -84,8 +81,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    private void getShowcaseMovies() {
-        checkViewAttached();
+    public void getShowcaseMovies() {
         mSubscriptions.add(mDataManager.getShowcaseMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -94,8 +90,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     public void onSuccess(ResponseBody value) {
                         Timber.i("Showcase Movies FETCHED");
                         try {
-                            getMvpView().showProgress(false);
-                            for (Movie movie : WebParser.getShowcaseMoviesTitles(value.string())) {
+                            ArrayList<Movie> movies = WebParser.getShowcaseMoviesTitles(value.string());
+                            for (Movie movie : movies) {
                                 if(!getMvpView().isMovieInList(movie)) {
                                     Timber.i("%s not in list.", movie.title);
                                     getMovieData(movie);
@@ -111,12 +107,11 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
                     @Override
                     public void onError(Throwable error) {
-                        getMvpView().showProgress(false);
                     }
                 }));
     }
 
-    private void getMonumentalMovies() {
+    public void getMonumentalMovies() {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getMonumentalMovies()
                 .observeOn(Schedulers.io())
@@ -124,7 +119,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 .subscribe(new SingleSubscriber<ResponseBody>() {
                     @Override
                     public void onSuccess(ResponseBody value) {
-                        getMvpView().showProgress(false);
                         Timber.i("Monumental Movies FETCHED");
                         try {
                             for(Movie movie : WebParser.getMonumentalMoviesTitles(value.string())) {
@@ -148,7 +142,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    private void getDelCentroMovies() {
+    public void getDelCentroMovies() {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getDelCentroMovies()
                 .observeOn(Schedulers.io())
@@ -176,17 +170,19 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    private void getHoytsMovies() {
+    public void getHoytsMovies() {
         checkViewAttached();
+        getMvpView().showProgress(true);
         mSubscriptions.add(mDataManager.getHoytsMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ArrayList<HoytsAnswer>>() {
                     @Override
                     public void onSuccess(ArrayList<HoytsAnswer> value) {
-                        ArrayList<String> titles = new ArrayList<String>();
+                        ArrayList<String> titles = new ArrayList<>();
                         for(HoytsAnswer title : value) {
-                            String realTitle = title.label.replace("SUBTITULADA", "")
+                            String realTitle = title.label
+                                    .replace("SUBTITULADA", "")
                                     .replace("CASTELLANO","")
                                     .replace("3D","")
                                     .replace("2D","")
@@ -214,7 +210,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    private void getVillageMovies() {
+    public void getVillageMovies() {
         checkViewAttached();
         mSubscriptions.add(mDataManager.getVillageMovies()
                 .observeOn(Schedulers.io())
@@ -222,7 +218,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 .subscribe(new SingleSubscriber<VillageAnswer>() {
                     @Override
                     public void onSuccess(VillageAnswer titles) {
-                        getMvpView().showProgress(false);
                         for (VillageAnswer.VillageMovie villageMovie : titles.data) {
                             Movie movie = new Movie();
                             movie.title = villageMovie.title_translated;
@@ -244,63 +239,22 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private void getMovieData(final Movie movie) {
         checkViewAttached();
-        Timber.i("Obtaining %s data", movie.title);
+        Timber.i("OBTAINING DATA: %s", movie.title);
         mSubscriptions.add(mDataManager.getMovieData(movie.title)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<MovieDbAnswer>() {
                     @Override
                     public void onSuccess(MovieDbAnswer movieData) {
-                        Timber.i("%s data obtained", movieData.results.get(0).title);
+                        getMvpView().showProgress(false);
+                        Timber.i("DATA OBTAINED: %s", movieData.results.get(0).title);
                         movieData.results.get(0).cinemas = movie.cinemas;
                         if(movieData.results.get(0).genreIds.isEmpty()) return;
-                        mSubscriptions.add(mDataManager.addMovieToDb(movieData.results.get(0))
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribeOn(Schedulers.io())
-                                .subscribe(new Observer<Movie>() {
-                                    @Override
-                                    public void onCompleted() {
-                                        getMvpView().showProgress(false);
-                                    }
-
-                                    @Override
-                                    public void onError(Throwable e) {
-
-                                    }
-
-                                    @Override
-                                    public void onNext(Movie movie) {
-                                        Timber.i("%s added to DB", movie.title);
-                                        getMvpView().addMovie(movie);
-                                    }
-                                }));
+                        getMvpView().addMovie(movieData.results.get(0));
                     }
 
                     @Override
                     public void onError(Throwable error) {
-                    }
-                }));
-    }
-
-    private void getMoviesFromDb() {
-        checkViewAttached();
-        mSubscriptions.add(mDataManager.getMoviesFromDb()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(new Observer<List<Movie>>() {
-                    @Override
-                    public void onCompleted() {
-                        getMvpView().showProgress(false);
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onNext(List<Movie> movies) {
-                        getMvpView().showMovies((ArrayList<Movie>) movies);
                     }
                 }));
     }
@@ -313,7 +267,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 .subscribe(new SingleSubscriber<ResponseBody>() {
                     @Override
                     public void onSuccess(ResponseBody value) {
-                        getMvpView().showProgress(false);
                         try {
                             getMvpView().addMovie(WebParser.getElCairoMovieData(value.string()));
                         } catch (IOException e) {
@@ -328,7 +281,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getMoviesFromDbOrNetwork(final boolean showcaseEnabled,
+    /*public void getMoviesFromDbOrNetwork(final boolean showcaseEnabled,
                                          final boolean elCairoEnabled,
                                          final boolean hoytsEnabled,
                                          final boolean villageEnabled,
@@ -365,9 +318,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                         }
                     }
                 }));
-    }
+    }*/
 
-    public void getMoviesFromNetwork(boolean showcaseEnabled,
+    /*public void getMoviesFromNetwork(boolean showcaseEnabled,
                                      boolean elCairoEnabled,
                                      boolean hoytsEnabled,
                                      boolean villageEnabled,
@@ -380,5 +333,28 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
         if(villageEnabled) getVillageMovies();
         if(delCentroEnabled) getDelCentroMovies();
         if(monumentalEnabled) getMonumentalMovies();
-    }
+    }*/
+
+    /*private void getMoviesFromDb() {
+        checkViewAttached();
+        mSubscriptions.add(mDataManager.getMoviesFromDb()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Observer<List<Movie>>() {
+                    @Override
+                    public void onCompleted() {
+                        getMvpView().showProgress(false);
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(List<Movie> movies) {
+                        getMvpView().showMovies((ArrayList<Movie>) movies);
+                    }
+                }));
+    }*/
 }

@@ -59,7 +59,6 @@ public class MoviesFragment extends BaseFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentComponent().inject(this);
-        getRemoteConfig(false);
     }
 
     @Nullable
@@ -75,20 +74,17 @@ public class MoviesFragment extends BaseFragment
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        getRemoteConfig(true);
+                        mMoviesPresenter.getHoytsMovies();
                     }
                 });
 
         mMoviesAdapter.setClickListener(this);
         mMoviesRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mMoviesRecycler.setAdapter(mMoviesAdapter);
+
+        mMoviesPresenter.getHoytsMovies();
+
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -141,7 +137,7 @@ public class MoviesFragment extends BaseFragment
         mProgressText.setText(String.format("Obteniendo películas del cine %1$s", text));
     }
 
-    public void getRemoteConfig(final boolean fromNetworkOnly) {
+    /*public void getRemoteConfig(final boolean fromNetworkOnly) {
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         // Create Remote Config Setting to enable developer mode.
@@ -191,9 +187,9 @@ public class MoviesFragment extends BaseFragment
                         setCinemasAvailable(fromNetworkOnly);
                     }
                 });
-    }
+    }*/
 
-    private void setCinemasAvailable(boolean fromNetworkOnly) {
+    /*private void setCinemasAvailable(boolean fromNetworkOnly) {
         showcaseEnabled = mFirebaseRemoteConfig.getBoolean("showcase_enabled");
         elCairoEnabled = mFirebaseRemoteConfig.getBoolean("el_cairo_enabled");
         hoytsEnabled = mFirebaseRemoteConfig.getBoolean("hoyts_enabled");
@@ -224,5 +220,5 @@ public class MoviesFragment extends BaseFragment
                 villageEnabled ? "Village":"",
                 delCentroEnabled ? "Del Centro":"",
                 monumentalEnabled ? "Monumental":"");
-    }
+    }*/
 }
