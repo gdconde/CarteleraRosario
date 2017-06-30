@@ -1,4 +1,4 @@
-package com.gdconde.cartelerarosario.ui.main;
+package com.gdconde.cartelerarosario.ui.movies;
 
 import com.gdconde.cartelerarosario.data.DataManager;
 import com.gdconde.cartelerarosario.data.model.HoytsAnswer;
@@ -82,6 +82,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
     }
 
     public void getShowcaseMovies() {
+        checkViewAttached();
+        getMvpView().showProgress(true);
         mSubscriptions.add(mDataManager.getShowcaseMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -113,6 +115,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     public void getMonumentalMovies() {
         checkViewAttached();
+        getMvpView().showProgress(true);
         mSubscriptions.add(mDataManager.getMonumentalMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())

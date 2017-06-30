@@ -1,10 +1,11 @@
-package com.gdconde.cartelerarosario.ui.main;
+package com.gdconde.cartelerarosario.ui.movies;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import javax.inject.Inject;
+import com.gdconde.cartelerarosario.ui.main.CinemasFragment;
+import com.gdconde.cartelerarosario.ui.movies.MoviesFragment;
 
 /**
  * Created by gdconde on 2/3/17.

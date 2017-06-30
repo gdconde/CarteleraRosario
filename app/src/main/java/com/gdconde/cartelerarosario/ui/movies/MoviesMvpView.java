@@ -1,4 +1,4 @@
-package com.gdconde.cartelerarosario.ui.main;
+package com.gdconde.cartelerarosario.ui.movies;
 
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.ui.base.MvpView;

@@ -4,13 +4,22 @@
     <item
         android:id="@+id/action_movies"
         android:enabled="true"
-        android:icon="@drawable/common_google_signin_btn_icon_dark"
+        android:icon="@null"
         android:title="Cartelera"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom"
+        />
     <item
         android:id="@+id/action_cinemas"
         android:enabled="true"
-        android:icon="@drawable/common_full_open_on_phone"
+        android:icon="@null"
         android:title="Cines"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:icon="@null"
+        android:title="Ajustes"
+        app:showAsAction="ifRoom"
+        />
 </menu>

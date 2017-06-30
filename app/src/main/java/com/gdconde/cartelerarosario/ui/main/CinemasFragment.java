@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.gdconde.cartelerarosario.R;
 import com.gdconde.cartelerarosario.data.model.Cinema;
 import com.gdconde.cartelerarosario.ui.base.BaseFragment;
+import com.gdconde.cartelerarosario.util.Util;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -42,8 +43,7 @@ public class CinemasFragment extends BaseFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentComponent().inject(this);
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        database.setPersistenceEnabled(true);
+        FirebaseDatabase database = Util.getDatabase();
         DatabaseReference myRef = database.getReference("cinemas");
 
         // Read from the database

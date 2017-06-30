@@ -3,6 +3,7 @@ package com.gdconde.cartelerarosario.util;
 import com.gdconde.cartelerarosario.data.model.Genre;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDetail;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -15,6 +16,16 @@ import java.util.Locale;
  */
 
 public final class Util {
+
+    private static FirebaseDatabase mDatabase;
+
+    public static FirebaseDatabase getDatabase() {
+        if (mDatabase == null) {
+            mDatabase = FirebaseDatabase.getInstance();
+            mDatabase.setPersistenceEnabled(true);
+        }
+        return mDatabase;
+    }
 
     public static int stringToIntMonth(String month) {
         switch (month) {
