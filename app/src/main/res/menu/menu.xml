@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_movies"
+        android:enabled="true"
+        android:icon="@null"
+        android:title="Cartelera"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_cinemas"
+        android:enabled="true"
+        android:icon="@null"
+        android:title="Cines"
+        app:showAsAction="ifRoom"
+        />
+    <item
+        android:id="@+id/action_settings"
+        android:enabled="true"
+        android:icon="@null"
+        android:title="Ajustes"
+        app:showAsAction="ifRoom"
+        />
+</menu>

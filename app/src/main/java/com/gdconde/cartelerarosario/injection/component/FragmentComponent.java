@@ -4,7 +4,7 @@ import com.gdconde.cartelerarosario.injection.PerFragment;
 import com.gdconde.cartelerarosario.injection.module.FragmentModule;
 import com.gdconde.cartelerarosario.ui.base.BaseFragment;
 import com.gdconde.cartelerarosario.ui.main.CinemasFragment;
-import com.gdconde.cartelerarosario.ui.main.MoviesFragment;
+import com.gdconde.cartelerarosario.ui.movies.MoviesFragment;
 
 import dagger.Subcomponent;
 

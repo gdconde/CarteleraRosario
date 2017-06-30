@@ -1,4 +1,4 @@
-package com.gdconde.cartelerarosario.ui.main;
+package com.gdconde.cartelerarosario.ui.movies;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -50,6 +50,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.MovieViewH
     public void addAll(ArrayList<Movie> movies) {
         mMovies.clear();
         mMovies.addAll(movies);
+        notifyDataSetChanged();
+    }
+
+    public void removeAll() {
+        mMovies.clear();
         notifyDataSetChanged();
     }
 

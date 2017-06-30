@@ -1,8 +1,8 @@
-package com.gdconde.cartelerarosario.ui.main;
+package com.gdconde.cartelerarosario.ui.movies;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,15 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.gdconde.cartelerarosario.BuildConfig;
 import com.gdconde.cartelerarosario.R;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.ui.base.BaseFragment;
 import com.gdconde.cartelerarosario.ui.detail.DetailActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
 import java.util.ArrayList;
 
@@ -28,7 +24,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * Created by gdconde on 2/3/17.
@@ -46,6 +41,8 @@ public class MoviesFragment extends BaseFragment
     @BindView(R.id.progress_text) TextView mProgressText;
     @BindView(R.id.recycler_movies) RecyclerView mMoviesRecycler;
     @BindView(R.id.swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
+    @BindView(R.id.tabLayout) TabLayout mTabLayout;
+//    @BindView(R.id.viewPager) ViewPager mViewPager;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private boolean showcaseEnabled;
@@ -59,7 +56,6 @@ public class MoviesFragment extends BaseFragment
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fragmentComponent().inject(this);
-        getRemoteConfig(false);
     }
 
     @Nullable
@@ -75,20 +71,61 @@ public class MoviesFragment extends BaseFragment
                 new SwipeRefreshLayout.OnRefreshListener() {
                     @Override
                     public void onRefresh() {
-                        getRemoteConfig(true);
+                        getMovies(mTabLayout.getSelectedTabPosition());
                     }
                 });
 
         mMoviesAdapter.setClickListener(this);
         mMoviesRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mMoviesRecycler.setAdapter(mMoviesAdapter);
+
+        mTabLayout.addTab(mTabLayout.newTab().setText("Showcase"), true);
+        mTabLayout.addTab(mTabLayout.newTab().setText("Hoyts"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Monumental"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Village"));
+        mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+
+        getMovies(0);
+
+        /*PagerAdapter mPagerAdapter =
+                new PagerAdapter(getActivity().getSupportFragmentManager(), mTabLayout.getTabCount());
+        mViewPager.setAdapter(mPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                mTabLayout.getTabAt(position).select();
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });*/
+        mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+//                mViewPager.setCurrentItem(tab.getPosition());
+                mMoviesAdapter.removeAll();
+                getMovies(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
         return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
     }
 
     @Override
@@ -141,7 +178,25 @@ public class MoviesFragment extends BaseFragment
         mProgressText.setText(String.format("Obteniendo películas del cine %1$s", text));
     }
 
-    public void getRemoteConfig(final boolean fromNetworkOnly) {
+    private void getMovies(int position) {
+        switch (position) {
+            case 0:
+                mMoviesPresenter.getShowcaseMovies();
+                break;
+            case 1:
+                mMoviesPresenter.getHoytsMovies();
+                break;
+            case 2:
+                mMoviesPresenter.getMonumentalMovies();
+                break;
+            case 3:
+                mMoviesPresenter.getVillageMovies();
+                break;
+        }
+
+    }
+
+    /*public void getRemoteConfig(final boolean fromNetworkOnly) {
         mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
 
         // Create Remote Config Setting to enable developer mode.
@@ -191,9 +246,9 @@ public class MoviesFragment extends BaseFragment
                         setCinemasAvailable(fromNetworkOnly);
                     }
                 });
-    }
+    }*/
 
-    private void setCinemasAvailable(boolean fromNetworkOnly) {
+    /*private void setCinemasAvailable(boolean fromNetworkOnly) {
         showcaseEnabled = mFirebaseRemoteConfig.getBoolean("showcase_enabled");
         elCairoEnabled = mFirebaseRemoteConfig.getBoolean("el_cairo_enabled");
         hoytsEnabled = mFirebaseRemoteConfig.getBoolean("hoyts_enabled");
@@ -224,5 +279,5 @@ public class MoviesFragment extends BaseFragment
                 villageEnabled ? "Village":"",
                 delCentroEnabled ? "Del Centro":"",
                 monumentalEnabled ? "Monumental":"");
-    }
+    }*/
 }
