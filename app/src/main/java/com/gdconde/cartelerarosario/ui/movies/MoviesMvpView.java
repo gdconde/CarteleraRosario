@@ -17,7 +17,7 @@ public interface MoviesMvpView extends MvpView {
 
     void showProgress(boolean show);
 
-    void showProgressText(String text);
+    void showProgress(String text);
 
     boolean isMovieInList(Movie movie);
 

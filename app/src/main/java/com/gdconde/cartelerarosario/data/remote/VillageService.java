@@ -4,6 +4,7 @@ import com.gdconde.cartelerarosario.data.model.VillageAnswer;
 
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
+import retrofit2.http.Query;
 import rx.Single;
 
 /**
@@ -12,6 +13,8 @@ import rx.Single;
 
 public interface VillageService {
 
-    @GET("api/showtimes?complex=4&date=2017-04-07")
-    Single<VillageAnswer> getVillageMovies();
+    @GET("movies?complex=4")
+    Single<VillageAnswer> getVillageMovies(
+            @Query("date") String date
+    );
 }

@@ -42,7 +42,6 @@ public class MoviesFragment extends BaseFragment
     @BindView(R.id.recycler_movies) RecyclerView mMoviesRecycler;
     @BindView(R.id.swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.tabLayout) TabLayout mTabLayout;
-//    @BindView(R.id.viewPager) ViewPager mViewPager;
 
     private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private boolean showcaseEnabled;
@@ -79,33 +78,17 @@ public class MoviesFragment extends BaseFragment
         mMoviesRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mMoviesRecycler.setAdapter(mMoviesAdapter);
 
+        mTabLayout.setSelectedTabIndicatorColor(getResources()
+                .getColor(R.color.accent));
         mTabLayout.addTab(mTabLayout.newTab().setText("Showcase"), true);
         mTabLayout.addTab(mTabLayout.newTab().setText("Hoyts"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Monumental"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Village"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("Del Centro"));
+        mTabLayout.addTab(mTabLayout.newTab().setText("El Cairo"));
         mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
 
         getMovies(0);
-
-        /*PagerAdapter mPagerAdapter =
-                new PagerAdapter(getActivity().getSupportFragmentManager(), mTabLayout.getTabCount());
-        mViewPager.setAdapter(mPagerAdapter);
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                mTabLayout.getTabAt(position).select();
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });*/
         mTabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -174,8 +157,9 @@ public class MoviesFragment extends BaseFragment
     }
 
     @Override
-    public void showProgressText(String text) {
-        mProgressText.setText(String.format("Obteniendo películas del cine %1$s", text));
+    public void showProgress(String text) {
+        mProgressText.setText(String.format("Obteniendo películas\nCine %1$s", text));
+        showProgress(true);
     }
 
     private void getMovies(int position) {
@@ -191,6 +175,12 @@ public class MoviesFragment extends BaseFragment
                 break;
             case 3:
                 mMoviesPresenter.getVillageMovies();
+                break;
+            case 4:
+                mMoviesPresenter.getDelCentroMovies();
+                break;
+            case 5:
+                mMoviesPresenter.getElCairoMovies();
                 break;
         }
 
