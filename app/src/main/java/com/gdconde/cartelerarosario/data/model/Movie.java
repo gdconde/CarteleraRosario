@@ -50,6 +50,8 @@ public class Movie {
 
     public Long updateTime;
 
+    public Double popularity;
+
     @Override
     public boolean equals(Object obj) {
         if(!(obj instanceof Movie)) {

@@ -60,6 +60,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
             selectedItem = mBottomMenu.getMenu().getItem(0);
         }
         selectFragment(selectedItem);
+        mBottomMenu.getMenu().getItem(0).setChecked(true);
     }
 
     @Override
@@ -103,7 +104,7 @@ public class MainActivity extends BaseActivity implements MainMvpView {
         mSelectedItem = item.getItemId();
 
         // uncheck the other items.
-        for (int i = 0; i< mBottomMenu.getMenu().size(); i++) {
+        for (int i = 0; i < mBottomMenu.getMenu().size(); i++) {
             MenuItem menuItem = mBottomMenu.getMenu().getItem(i);
             menuItem.setChecked(menuItem.getItemId() == item.getItemId());
         }

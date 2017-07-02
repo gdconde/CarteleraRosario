@@ -48,8 +48,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
         mSubscriptions = null;
     }
 
-    public void getElCairoMovies() {
+    void getElCairoMovies() {
         checkViewAttached();
+        getMvpView().showProgress("El Cairo");
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         mSubscriptions.add(mDataManager.getElCairoMovies(calendar)
@@ -81,9 +82,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getShowcaseMovies() {
+    void getShowcaseMovies() {
         checkViewAttached();
-        getMvpView().showProgress(true);
+        getMvpView().showProgress("Showcase");
         mSubscriptions.add(mDataManager.getShowcaseMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -113,9 +114,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getMonumentalMovies() {
+    void getMonumentalMovies() {
         checkViewAttached();
-        getMvpView().showProgress(true);
+        getMvpView().showProgress("Monumental");
         mSubscriptions.add(mDataManager.getMonumentalMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -145,8 +146,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getDelCentroMovies() {
+    void getDelCentroMovies() {
         checkViewAttached();
+        getMvpView().showProgress("Del Centro");
         mSubscriptions.add(mDataManager.getDelCentroMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -173,9 +175,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getHoytsMovies() {
+    void getHoytsMovies() {
         checkViewAttached();
-        getMvpView().showProgress(true);
+        getMvpView().showProgress("Hoyts");
         mSubscriptions.add(mDataManager.getHoytsMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -213,8 +215,9 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                 }));
     }
 
-    public void getVillageMovies() {
+    void getVillageMovies() {
         checkViewAttached();
+        getMvpView().showProgress("Village");
         mSubscriptions.add(mDataManager.getVillageMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
@@ -235,7 +238,6 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
                     @Override
                     public void onError(Throwable error) {
-
                     }
                 }));
     }
@@ -250,10 +252,26 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     @Override
                     public void onSuccess(MovieDbAnswer movieData) {
                         getMvpView().showProgress(false);
-                        Timber.i("DATA OBTAINED: %s", movieData.results.get(0).title);
-                        movieData.results.get(0).cinemas = movie.cinemas;
-                        if(movieData.results.get(0).genreIds.isEmpty()) return;
-                        getMvpView().addMovie(movieData.results.get(0));
+                        int count = movieData.total_results;
+                        if (movieData.total_results > 5) {
+                            count = 5;
+                        }
+                        for (int i = 0; i < count; i++) {
+                            if (movie.cinemas.get(0).equalsIgnoreCase(Movie.EL_CAIRO)) {
+                                movieData.results.get(0).cinemas = movie.cinemas;
+                                Timber.i("DATA OBTAINED: %s", movieData.results.get(0).title);
+                                if(movieData.results.get(0).genreIds.isEmpty()) return;
+                                getMvpView().addMovie(movieData.results.get(0));
+                            }
+                            else if (movieData.results.get(i).popularity > 1.2 &&
+                                    Integer.valueOf(movieData.results.get(i).releaseDate.substring(0,4)) > 2015) {
+                                movieData.results.get(i).cinemas = movie.cinemas;
+                                Timber.i("DATA OBTAINED: %s", movieData.results.get(i).title);
+                                if(movieData.results.get(i).genreIds.isEmpty()) return;
+                                getMvpView().addMovie(movieData.results.get(i));
+                                return;
+                            }
+                        }
                     }
 
                     @Override

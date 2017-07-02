@@ -17,8 +17,10 @@ import com.gdconde.cartelerarosario.data.remote.VillageService;
 import com.gdconde.cartelerarosario.util.Util;
 
 import java.io.ObjectStreamException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -83,8 +85,11 @@ public class DataManager {
     }
 
     public Single<VillageAnswer> getVillageMovies() {
-        return mVillageService.getVillageMovies();
+        String date = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
+        return mVillageService.getVillageMovies(date);
     }
+
+//    https://www.villagecines.com/api/movies?complex=4&date=2017-07-01
 
     public Single<MovieDetail> getMovieDetail(String movieId) {
         return mTheMovieDbService
