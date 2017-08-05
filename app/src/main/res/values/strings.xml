@@ -21,4 +21,6 @@
     <string name="language">Idioma:</string>
     <string name="release_date">Fecha de estreno:</string>
     <string name="runtime">Duración:</string>
+    <string name="movie_backdrop_description">Movie backdrop</string>
+    <string name="movie_poster">Movie Poster</string>
 </resources>

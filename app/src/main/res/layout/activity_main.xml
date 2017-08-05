@@ -3,7 +3,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:design="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >
@@ -27,7 +26,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:weightSum="1"
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         >
@@ -40,16 +38,14 @@
             android:name="com.gdconde.cartelerarosario.ui.main.MoviesFragment"
             />
 
-
     </LinearLayout>
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottomMenu"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        design:menu="@menu/menu"
         android:background="@color/accent"
+        design:menu="@menu/menu"
         />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -2,12 +2,16 @@ package com.gdconde.cartelerarosario.ui.detail;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -44,24 +48,17 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
     @BindView(R.id.image_backdrop) ImageView mBackdropImage;
     @BindView(R.id.layout_movie) NestedScrollView mMovieLayout;
     @BindView(R.id.text_genre) TextView mGenreText;
-    @BindView(R.id.text_cinemas) TextView mCinemasText;
-    @BindView(R.id.layout_cast) LinearLayout mCastLayout;
     @BindView(R.id.text_cast) TextView mCastText;
-    @BindView(R.id.layout_director) LinearLayout mDirectorLayout;
     @BindView(R.id.text_director) TextView mDirectorText;
-    @BindView(R.id.layout_country) LinearLayout mCountryLayout;
     @BindView(R.id.text_country) TextView mCountryText;
-    @BindView(R.id.layout_language) LinearLayout mLanguageLayout;
     @BindView(R.id.text_language) TextView mLanguageText;
-    @BindView(R.id.layout_release_date) LinearLayout mReleaseDateLayout;
     @BindView(R.id.text_release_date) TextView mReleaseDateText;
-    @BindView(R.id.layout_runtime) LinearLayout mRuntimeLayout;
     @BindView(R.id.text_runtime) TextView mRuntimeText;
     @BindView(R.id.text_sinopsis) TextView mSinopsisText;
     @BindView(R.id.text_tagline) TextView mTaglineText;
+    @BindView(R.id.image_poster) ImageView mPosterImageView;
 
     private String mMovieId;
-    private ArrayList<String> mCinemas;
 
     public static Intent getStartIntent(Context context, String movieId, ArrayList<String> cinemas) {
         Intent intent = new Intent(context, DetailActivity.class);
@@ -83,7 +80,7 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
         if (mMovieId == null) {
             throw new IllegalArgumentException("Detail Activity requires a movie id@");
         }
-        mCinemas = getIntent().getStringArrayListExtra(EXTRA_CINEMAS);
+        ArrayList<String> mCinemas = getIntent().getStringArrayListExtra(EXTRA_CINEMAS);
         if (mCinemas == null) {
             throw new IllegalArgumentException("Detail Activity requires movie cinemas@");
         }
@@ -107,16 +104,28 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
     public void showMovie(MovieDetail movie) {
         mMovieLayout.setVisibility(View.VISIBLE);
         mCollapsingToolbar.setTitle(movie.title);
-        mCollapsingToolbar
-                .setExpandedTitleColor(getResources().getColor(android.R.color.transparent));
 
         Glide.with(this)
-                .load("https://image.tmdb.org/t/p/w780"+movie.backdropPath).into(mBackdropImage);
+                .load("https://image.tmdb.org/t/p/w780" + movie.backdropPath)
+                .into(mBackdropImage);
+        Glide.with(this)
+                .load("https://image.tmdb.org/t/p/w342" + movie.posterPath)
+                .into(mPosterImageView);
 
-        if(movie.credits.crew.get(0).job.equalsIgnoreCase("Director")) {
-            mDirectorText.setText(movie.credits.crew.get(0).name);
-        } else {
-            mDirectorLayout.setVisibility(View.GONE);
+        for(int i = 0; i < 10; i++) {
+            if(movie.credits.crew.get(i).job.equalsIgnoreCase("Director")) {
+                Util.setSpannableStringText(
+                        mDirectorText,
+                        "Director: ",
+                        movie.credits.cast.get(i).name);
+                break;
+            }
+        }
+        if (mDirectorText.getText().toString().isEmpty()) {
+            Util.setSpannableStringText(
+                    mDirectorText,
+                    "Director: ",
+                    "Not found");
         }
 
         if(movie.credits.cast != null && movie.credits.cast.size() > 7) {
@@ -126,22 +135,19 @@ public class DetailActivity extends BaseActivity implements DetailMvpView, Error
                 builder.append(", ");
             }
             builder.append(movie.credits.cast.get(5).name);
-            mCastText.setText(builder.toString());
-        } else {
-            mCastLayout.setVisibility(View.GONE);
+            Util.setSpannableStringText(mCastText, "Actores: ", builder.toString());
         }
 
-        mCinemasText.setText(Util.cinemasToString(mCinemas));
         mGenreText.setText(Util.genreTextToString(movie.genres));
-        mCountryText.setText(Util.countryProductionsToString(movie.productionCountries));
-        mLanguageText.setText(movie.originalLanguage);
-        mReleaseDateText.setText(movie.releaseDate);
-        mRuntimeText.setText(movie.runtime);
+        Util.setSpannableStringText(mCountryText, "País: ", Util.countryProductionsToString(movie.productionCountries));
+        Util.setSpannableStringText(mLanguageText,"Idioma: ", movie.originalLanguage);
+        Util.setSpannableStringText(mReleaseDateText, "Fecha de estreno: ", movie.releaseDate);
+        Util.setSpannableStringText(mRuntimeText, "Duración: ", String.format("%1$s min", movie.runtime));
         mSinopsisText.setText(movie.overview);
         if(movie.tagline != null && !movie.tagline.isEmpty()) {
             mTaglineText.setText(movie.tagline);
         } else {
-            mTaglineText.setVisibility(View.INVISIBLE);
+            mTaglineText.setVisibility(View.GONE);
         }
     }
 

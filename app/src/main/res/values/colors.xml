@@ -9,4 +9,9 @@
     <color name="icons">#212121</color>
     <color name="white">#FFFFFF</color>
     <color name="divider">#BDBDBD</color>
+
+    <color name="translucent_scrim_top">#44000000</color>
+    <color name="translucent_scrim_top_center">#44000000</color>
+    <color name="translucent_scrim_bottom">#44000000</color>
+    <color name="translucent_scrim_bottom_center">#44000000</color>
 </resources>

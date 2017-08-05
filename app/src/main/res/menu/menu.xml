@@ -4,21 +4,21 @@
     <item
         android:id="@+id/action_movies"
         android:enabled="true"
-        android:icon="@null"
+        android:icon="@drawable/ic_action_movies"
         android:title="Cartelera"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/action_cinemas"
         android:enabled="true"
-        android:icon="@null"
+        android:icon="@drawable/ic_action_cinemas"
         android:title="Cines"
         app:showAsAction="ifRoom"
         />
     <item
         android:id="@+id/action_settings"
         android:enabled="true"
-        android:icon="@null"
+        android:icon="@drawable/ic_action_settings"
         android:title="Ajustes"
         app:showAsAction="ifRoom"
         />

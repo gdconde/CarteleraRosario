@@ -1,5 +1,11 @@
 package com.gdconde.cartelerarosario.util;
 
+import android.graphics.Typeface;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.StyleSpan;
+import android.widget.TextView;
+
 import com.gdconde.cartelerarosario.data.model.Genre;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.data.model.MovieDetail;
@@ -27,7 +33,7 @@ public final class Util {
         return mDatabase;
     }
 
-    public static int stringToIntMonth(String month) {
+    static int stringToIntMonth(String month) {
         switch (month) {
             case "Enero": return 0;
             case "Febrero": return 1;
@@ -113,7 +119,7 @@ public final class Util {
         return builder.toString();
     }
 
-    public static String genreIdToString(int genreId) {
+    private static String genreIdToString(int genreId) {
         switch (genreId) {
             case Genre.ACTION: return "Acción";
             case Genre.ANIMATION: return "Animada";
@@ -136,6 +142,13 @@ public final class Util {
             case Genre.WESTERN: return "Western";
             default: return "Sin género";
         }
+    }
+
+    public static void setSpannableStringText(TextView view, String boldText, String text) {
+        SpannableString spannableString = new SpannableString(boldText);
+        spannableString.setSpan(new StyleSpan(Typeface.BOLD), 0, spannableString.length(), 0);
+        view.append(spannableString);
+        view.append(text);
     }
 
 }
