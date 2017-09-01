@@ -3,6 +3,7 @@ package com.gdconde.cartelerarosario.ui.movies;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.cooltechworks.views.shimmer.ShimmerRecyclerView;
 import com.gdconde.cartelerarosario.R;
 import com.gdconde.cartelerarosario.data.model.Movie;
 import com.gdconde.cartelerarosario.ui.base.BaseFragment;
@@ -25,10 +27,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by gdconde on 2/3/17.
- */
-
 public class MoviesFragment extends BaseFragment
         implements MoviesMvpView, MoviesAdapter.ClickListener {
 
@@ -37,9 +35,7 @@ public class MoviesFragment extends BaseFragment
     @Inject MoviesPresenter mMoviesPresenter;
     @Inject MoviesAdapter mMoviesAdapter;
 
-    @BindView(R.id.progress) ProgressBar mProgress;
-    @BindView(R.id.progress_text) TextView mProgressText;
-    @BindView(R.id.recycler_movies) RecyclerView mMoviesRecycler;
+    @BindView(R.id.recycler_movies) ShimmerRecyclerView mMoviesRecycler;
     @BindView(R.id.swipe_to_refresh) SwipeRefreshLayout mSwipeRefreshLayout;
     @BindView(R.id.tabLayout) TabLayout mTabLayout;
 
@@ -78,8 +74,8 @@ public class MoviesFragment extends BaseFragment
         mMoviesRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         mMoviesRecycler.setAdapter(mMoviesAdapter);
 
-        mTabLayout.setSelectedTabIndicatorColor(getResources()
-                .getColor(R.color.accent));
+        mTabLayout.setSelectedTabIndicatorColor(ContextCompat
+                .getColor(getContext(), R.color.accent));
         mTabLayout.addTab(mTabLayout.newTab().setText("Showcase"), true);
         mTabLayout.addTab(mTabLayout.newTab().setText("Hoyts"));
         mTabLayout.addTab(mTabLayout.newTab().setText("Monumental"));
@@ -143,23 +139,11 @@ public class MoviesFragment extends BaseFragment
     @Override
     public void showProgress(boolean show) {
         if (show) {
-            mProgress.setVisibility(View.VISIBLE);
-            mProgressText.setVisibility(View.VISIBLE);
-            mMoviesRecycler.setVisibility(View.GONE);
-            mSwipeRefreshLayout.setVisibility(View.GONE);
+            mMoviesRecycler.showShimmerAdapter();
         } else {
-            mProgress.setVisibility(View.GONE);
-            mProgressText.setVisibility(View.GONE);
-            mMoviesRecycler.setVisibility(View.VISIBLE);
-            mSwipeRefreshLayout.setVisibility(View.VISIBLE);
+            mMoviesRecycler.hideShimmerAdapter();
             mSwipeRefreshLayout.setRefreshing(false);
         }
-    }
-
-    @Override
-    public void showProgress(String text) {
-        mProgressText.setText(String.format("Obteniendo películas\nCine %1$s", text));
-        showProgress(true);
     }
 
     private void getMovies(int position) {
