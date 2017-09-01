@@ -50,7 +50,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     void getElCairoMovies() {
         checkViewAttached();
-        getMvpView().showProgress("El Cairo");
+        getMvpView().showProgress(true);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         mSubscriptions.add(mDataManager.getElCairoMovies(calendar)
@@ -84,8 +84,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     void getShowcaseMovies() {
         checkViewAttached();
-        getMvpView().showProgress("Showcase");
         mSubscriptions.add(mDataManager.getShowcaseMovies()
+        getMvpView().showProgress(true);
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ResponseBody>() {
@@ -116,8 +116,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     void getMonumentalMovies() {
         checkViewAttached();
-        getMvpView().showProgress("Monumental");
         mSubscriptions.add(mDataManager.getMonumentalMovies()
+        getMvpView().showProgress(true);
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ResponseBody>() {
@@ -148,8 +148,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     void getDelCentroMovies() {
         checkViewAttached();
-        getMvpView().showProgress("Del Centro");
         mSubscriptions.add(mDataManager.getDelCentroMovies()
+        getMvpView().showProgress(true);
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ResponseBody>() {
@@ -177,8 +177,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     void getHoytsMovies() {
         checkViewAttached();
-        getMvpView().showProgress("Hoyts");
         mSubscriptions.add(mDataManager.getHoytsMovies()
+        getMvpView().showProgress(true);
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<ArrayList<HoytsAnswer>>() {
@@ -217,8 +217,8 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     void getVillageMovies() {
         checkViewAttached();
-        getMvpView().showProgress("Village");
         mSubscriptions.add(mDataManager.getVillageMovies()
+        getMvpView().showProgress(true);
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
                 .subscribe(new SingleSubscriber<VillageAnswer>() {

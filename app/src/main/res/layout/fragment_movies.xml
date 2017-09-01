@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
 
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
@@ -20,41 +19,16 @@
         android:layout_height="match_parent"
         >
 
-        <android.support.v7.widget.RecyclerView
+        <com.cooltechworks.views.shimmer.ShimmerRecyclerView
             android:id="@+id/recycler_movies"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:shimmer_demo_child_count="3"
+            app:shimmer_demo_layout="@layout/shimmer_movie"
+            app:shimmer_demo_layout_manager_type="linear_vertical"
+            app:shimmer_demo_view_holder_item_background="@android:color/darker_gray"
             />
 
     </android.support.v4.widget.SwipeRefreshLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-        <ProgressBar
-            android:id="@+id/progress"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="164dp"
-            android:visibility="gone"
-            />
-
-        <TextView
-            android:id="@+id/progress_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/progress"
-            android:layout_centerHorizontal="true"
-            android:textSize="16sp"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:visibility="gone"
-            android:text="Obteniendo películas"
-            />
-
-    </RelativeLayout>
 
 </LinearLayout>
