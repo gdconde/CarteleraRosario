@@ -73,7 +73,7 @@ public class Db {
             movie.sinopsis = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SINOPSIS));
             movie.releaseDate = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_RELEASE_DATE));
             movie.genreIds =
-                    new ArrayList<String>(
+                    new ArrayList<>(
                             Arrays.asList(
                                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_GENRES))
                                             .replace("[","")
@@ -83,7 +83,7 @@ public class Db {
             if (movie.genreIds.get(0).equalsIgnoreCase("")) movie.genreIds = null;
             movie.originalLanguage = cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_LANGUAGE));
             movie.schedule =
-                    new ArrayList<String>(
+                    new ArrayList<>(
                             Arrays.asList(
                                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_SCHEDULE))
                                             .replace("[","")
@@ -92,7 +92,7 @@ public class Db {
                                             .split(",")));
             if (movie.schedule.get(0).equalsIgnoreCase("")) movie.schedule = null;
             movie.cinemas =
-                    new ArrayList<String>(
+                    new ArrayList<>(
                             Arrays.asList(
                                     cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_CINEMAS))
                                             .replace("[","")

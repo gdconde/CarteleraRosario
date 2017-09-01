@@ -19,7 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.util.List;
 
-import rx.Single;
+import io.reactivex.Single;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;

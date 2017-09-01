@@ -4,9 +4,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.gdconde.cartelerarosario.data.model.Movie;
-import com.squareup.sqlbrite.BriteDatabase;
-import com.squareup.sqlbrite.QueryObservable;
-import com.squareup.sqlbrite.SqlBrite;
+import com.squareup.sqlbrite2.BriteDatabase;
+import com.squareup.sqlbrite2.SqlBrite;
 
 import java.util.Calendar;
 import java.util.Collection;
@@ -15,9 +14,12 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import rx.Observable;
-import rx.Subscriber;
-import rx.functions.Func1;
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 
 /**
@@ -31,7 +33,7 @@ public class DatabaseHelper {
 
     @Inject
     public DatabaseHelper(DbOpenHelper dbOpenHelper) {
-        mDb = SqlBrite.create().wrapDatabaseHelper(dbOpenHelper);
+        mDb = new SqlBrite.Builder().build().wrapDatabaseHelper(dbOpenHelper, Schedulers.io());
     }
 
     public BriteDatabase getBriteDb() {
@@ -61,20 +63,20 @@ public class DatabaseHelper {
 
 
     public Observable<Movie> addMovies(final Collection<Movie> newMovies) {
-        return Observable.create(new Observable.OnSubscribe<Movie>() {
+        return Observable.create(new ObservableOnSubscribe<Movie>() {
             @Override
-            public void call(Subscriber<? super Movie> subscriber) {
-                if (subscriber.isUnsubscribed()) return;
+            public void subscribe(@NonNull ObservableEmitter<Movie> e) throws Exception {
+                if (e.isDisposed()) return;
                 BriteDatabase.Transaction transaction = mDb.newTransaction();
                 try {
                     for(Movie movie : newMovies) {
                         long result = mDb.insert(Db.MoviesTable.TABLE_NAME,
                                 Db.MoviesTable.toContentValues(movie),
                                 SQLiteDatabase.CONFLICT_REPLACE);
-                        if(result >= 0) subscriber.onNext(movie);
+                        if(result >= 0) e.onNext(movie);
                     }
                     transaction.markSuccessful();
-                    subscriber.onCompleted();
+                    e.onComplete();
                 } finally {
                     transaction.end();
                 }
@@ -83,17 +85,17 @@ public class DatabaseHelper {
     }
 
     public Observable<Movie> addMovie(final Movie movie) {
-        return Observable.create(new Observable.OnSubscribe<Movie>() {
+        return Observable.create(new ObservableOnSubscribe<Movie>() {
             @Override
-            public void call(Subscriber<? super Movie> subscriber) {
-                if(subscriber.isUnsubscribed()) return;
+            public void subscribe(@NonNull ObservableEmitter<Movie> e) throws Exception {
+                if (e.isDisposed()) return;
                 BriteDatabase.Transaction transaction = mDb.newTransaction();
                 try {
                     mDb.insert(Db.MoviesTable.TABLE_NAME,
                             Db.MoviesTable.toContentValues(movie),
                             SQLiteDatabase.CONFLICT_REPLACE);
                     transaction.markSuccessful();
-                    subscriber.onCompleted();
+                    e.onComplete();
                 } finally {
                     transaction.end();
                 }
@@ -104,9 +106,9 @@ public class DatabaseHelper {
     public Observable<List<Movie>> getMovies() {
         return mDb.createQuery(Db.MoviesTable.TABLE_NAME,
                 "SELECT * FROM " + Db.MoviesTable.TABLE_NAME)
-                .mapToList(new Func1<Cursor, Movie>() {
+                .mapToList(new Function<Cursor, Movie>() {
                     @Override
-                    public Movie call(Cursor cursor) {
+                    public Movie apply(@NonNull Cursor cursor) throws Exception {
                         return Db.MoviesTable.parseCursor(cursor);
                     }
                 });

@@ -14,38 +14,21 @@ import java.util.Calendar;
 
 import javax.inject.Inject;
 
+import io.reactivex.SingleObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import okhttp3.ResponseBody;
-import rx.SingleSubscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 import timber.log.Timber;
-
-/**
- * Created by gdconde on 2/3/17.
- */
 
 public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
 
     private final DataManager mDataManager;
-    private CompositeSubscription mSubscriptions;
 
     @Inject
     public MoviesPresenter(DataManager dataManager) {
         mDataManager = dataManager;
-    }
-
-    @Override
-    public void attachView(MoviesMvpView mvpView) {
-        super.attachView(mvpView);
-        mSubscriptions = new CompositeSubscription();
-    }
-
-    @Override
-    public void detachView() {
-        super.detachView();
-        mSubscriptions.unsubscribe();
-        mSubscriptions = null;
     }
 
     void getElCairoMovies() {
@@ -53,10 +36,16 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
         getMvpView().showProgress(true);
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, 1);
-        mSubscriptions.add(mDataManager.getElCairoMovies(calendar)
+        mDataManager
+                .getElCairoMovies(calendar)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ResponseBody>() {
+                .subscribe(new SingleObserver<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
                     @Override
                     public void onSuccess(ResponseBody value) {
                         Timber.i("El Cairo Movies FETCHED");
@@ -79,16 +68,22 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     public void onError(Throwable error) {
 
                     }
-                }));
+                });
     }
 
     void getShowcaseMovies() {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getShowcaseMovies()
         getMvpView().showProgress(true);
+        mDataManager
+                .getShowcaseMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ResponseBody>() {
+                .subscribe(new SingleObserver<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
                     @Override
                     public void onSuccess(ResponseBody value) {
                         Timber.i("Showcase Movies FETCHED");
@@ -111,21 +106,27 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     @Override
                     public void onError(Throwable error) {
                     }
-                }));
+                });
     }
 
     void getMonumentalMovies() {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getMonumentalMovies()
         getMvpView().showProgress(true);
+        mDataManager
+                .getMonumentalMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ResponseBody>() {
+                .subscribe(new SingleObserver<ResponseBody>() {
                     @Override
-                    public void onSuccess(ResponseBody value) {
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull ResponseBody responseBody) {
                         Timber.i("Monumental Movies FETCHED");
                         try {
-                            for(Movie movie : WebParser.getMonumentalMoviesTitles(value.string())) {
+                            for(Movie movie : WebParser.getMonumentalMoviesTitles(responseBody.string())) {
                                 if(!getMvpView().isMovieInList(movie)) {
                                     Timber.i("%s not in list.", movie.title);
                                     getMovieData(movie);
@@ -140,23 +141,29 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
+                    public void onError(@NonNull Throwable e) {
 
                     }
-                }));
+                });
     }
 
     void getDelCentroMovies() {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getDelCentroMovies()
         getMvpView().showProgress(true);
+        mDataManager
+                .getDelCentroMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ResponseBody>() {
+                .subscribe(new SingleObserver<ResponseBody>() {
                     @Override
-                    public void onSuccess(ResponseBody value) {
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull ResponseBody responseBody) {
                         try {
-                            for(Movie movie : WebParser.getDelCentroMoviesTitles(value.string())) {
+                            for(Movie movie : WebParser.getDelCentroMoviesTitles(responseBody.string())) {
                                 if(!getMvpView().isMovieInList(movie)) {
                                     getMovieData(movie);
                                 } else {
@@ -169,19 +176,25 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
+                    public void onError(@NonNull Throwable e) {
 
                     }
-                }));
+                });
     }
 
     void getHoytsMovies() {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getHoytsMovies()
         getMvpView().showProgress(true);
+        mDataManager
+                .getHoytsMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ArrayList<HoytsAnswer>>() {
+                .subscribe(new SingleObserver<ArrayList<HoytsAnswer>>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
                     @Override
                     public void onSuccess(ArrayList<HoytsAnswer> value) {
                         ArrayList<String> titles = new ArrayList<>();
@@ -212,19 +225,25 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     public void onError(Throwable error) {
 
                     }
-                }));
+                });
     }
 
     void getVillageMovies() {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getVillageMovies()
         getMvpView().showProgress(true);
+        mDataManager
+                .getVillageMovies()
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<VillageAnswer>() {
+                .subscribe(new SingleObserver<VillageAnswer>() {
                     @Override
-                    public void onSuccess(VillageAnswer titles) {
-                        for (VillageAnswer.VillageMovie villageMovie : titles.data) {
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onSuccess(@NonNull VillageAnswer villageAnswer) {
+                        for (VillageAnswer.VillageMovie villageMovie : villageAnswer.data) {
                             Movie movie = new Movie();
                             movie.title = villageMovie.title_translated;
                             movie.cinemas.add(Movie.VILLAGE);
@@ -237,18 +256,25 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     }
 
                     @Override
-                    public void onError(Throwable error) {
+                    public void onError(@NonNull Throwable e) {
+
                     }
-                }));
+                });
     }
 
     private void getMovieData(final Movie movie) {
         checkViewAttached();
         Timber.i("OBTAINING DATA: %s", movie.title);
-        mSubscriptions.add(mDataManager.getMovieData(movie.title)
+        mDataManager
+                .getMovieData(movie.title)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<MovieDbAnswer>() {
+                .subscribe(new SingleObserver<MovieDbAnswer>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
                     @Override
                     public void onSuccess(MovieDbAnswer movieData) {
                         getMvpView().showProgress(false);
@@ -277,15 +303,21 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     @Override
                     public void onError(Throwable error) {
                     }
-                }));
+                });
     }
 
     private void getElCairoMovie(String movieUrl) {
         checkViewAttached();
-        mSubscriptions.add(mDataManager.getElCairoMovie(movieUrl)
+        mDataManager
+                .getElCairoMovie(movieUrl)
                 .observeOn(Schedulers.io())
                 .subscribeOn(Schedulers.io())
-                .subscribe(new SingleSubscriber<ResponseBody>() {
+                .subscribe(new SingleObserver<ResponseBody>() {
+                    @Override
+                    public void onSubscribe(@NonNull Disposable d) {
+
+                    }
+
                     @Override
                     public void onSuccess(ResponseBody value) {
                         try {
@@ -299,7 +331,7 @@ public class MoviesPresenter extends BasePresenter<MoviesMvpView> {
                     public void onError(Throwable error) {
 
                     }
-                }));
+                });
     }
 
     /*public void getMoviesFromDbOrNetwork(final boolean showcaseEnabled,

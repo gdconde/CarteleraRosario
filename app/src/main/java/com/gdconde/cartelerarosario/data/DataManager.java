@@ -16,19 +16,17 @@ import com.gdconde.cartelerarosario.data.remote.TheMovieDbService;
 import com.gdconde.cartelerarosario.data.remote.VillageService;
 import com.gdconde.cartelerarosario.util.Util;
 
-import java.io.ObjectStreamException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
+import io.reactivex.Single;
 import okhttp3.ResponseBody;
-import rx.Observable;
-import rx.Single;
 
 @Singleton
 public class DataManager {
