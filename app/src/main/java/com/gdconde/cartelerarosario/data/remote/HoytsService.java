@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Single;
+import io.reactivex.Single;
 
 /**
  * Created by gdconde on 9/2/17.

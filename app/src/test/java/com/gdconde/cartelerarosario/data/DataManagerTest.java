@@ -15,7 +15,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 
-import rx.Single;
+import io.reactivex.Single;
 import rx.observers.TestSubscriber;
 
 import static org.mockito.Matchers.anyInt;

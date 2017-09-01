@@ -5,7 +5,7 @@ import com.gdconde.cartelerarosario.data.model.VillageAnswer;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Single;
+import io.reactivex.Single;
 
 /**
  * Created by gdconde on 9/2/17.

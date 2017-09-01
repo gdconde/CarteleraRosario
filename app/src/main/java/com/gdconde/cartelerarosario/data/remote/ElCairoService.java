@@ -3,7 +3,7 @@ package com.gdconde.cartelerarosario.data.remote;
 import okhttp3.ResponseBody;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
-import rx.Single;
+import io.reactivex.Single;
 
 /**
  * Created by gdconde on 27/1/17.
